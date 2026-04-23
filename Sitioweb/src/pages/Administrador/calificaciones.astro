@@ -1,0 +1,69 @@
+---
+// src/pages/Administrador/calificaciones.astro
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calificaciones de cursos</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', sans-serif; background:#f1f5f9; }
+        .sidebar { width:260px; background:#0f172a; color:white; position:fixed; height:100vh; padding:1.5rem; }
+        .sidebar a { display:block; color:#cbd5e1; padding:0.75rem; margin-bottom:0.5rem; border-radius:0.75rem; text-decoration:none; }
+        .main { margin-left:260px; padding:2rem; }
+        .card { background:white; border-radius:1.5rem; padding:1.5rem; overflow-x:auto; }
+        table { width:100%; border-collapse:collapse; min-width:600px; }
+        th, td { padding:1rem; text-align:left; border-bottom:1px solid #e2e8f0; }
+        .estrellas { color:#f59e0b; }
+        @media (max-width:768px) {
+            .sidebar { width:100%; height:auto; position:relative; flex-wrap:wrap; display:flex; justify-content:center; gap:0.5rem; padding:1rem; }
+            .sidebar a { display:inline-block; }
+            .main { margin-left:0; padding:1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Administrador</h2>
+        <a href="/Administrador/dashboard">Inicio</a>
+        <a href="/Administrador/alta-profesor">Alta Profesor</a>
+        <a href="/Administrador/alta-curso">Alta Curso</a>
+        <a href="/Administrador/visualizaciones">Visualizaciones</a>
+        <a href="/Administrador/calificaciones">Calificaciones</a>
+        <a href="/Administrador/reportes">Reportes</a>
+        <a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+    </div>
+    <div class="main">
+        <div class="card">
+            <h2>Calificaciones y comentarios por curso</h2>
+            <div id="contenido">Cargando...</div>
+        </div>
+    </div>
+    <script>
+        async function cargar() {
+            const resp = await fetch('http://localhost/plataforma/api.php?action=calificaciones_listado', { credentials: 'include' });
+            const data = await resp.json();
+            if (!data.success) {
+                document.getElementById('contenido').innerHTML = '<p>Error al cargar</p>';
+                return;
+            }
+            let html = `<table>`;
+            html += `<thead><tr><th>Curso</th><th>Usuario</th><th>Calificación</th><th>Comentario</th><th>Fecha</th></tr></thead><tbody>`;
+            for (let c of data.calificaciones) {
+                let estrellas = '★'.repeat(c.puntuacion) + '☆'.repeat(5-c.puntuacion);
+                html += `<tr>
+                    <td>${c.curso}</td>
+                    <td>${c.usuario}</td>
+                    <td class="estrellas">${estrellas} (${c.puntuacion})</td>
+                    <td>${c.comentario || '-'}</td>
+                    <td>${c.created_at}</td>
+                </tr>`;
+            }
+            html += `</tbody></table>`;
+            document.getElementById('contenido').innerHTML = html;
+        }
+        cargar();
+    </script>
+</body>
+</html>

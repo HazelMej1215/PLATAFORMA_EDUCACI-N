@@ -1,0 +1,325 @@
+---
+// src/pages/Cliente/dashboard.astro
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Cliente | Plataforma Educativa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        /* Navbar moderno */
+        .navbar {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #1e293b;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+        }
+
+        .user-info span {
+            font-weight: 500;
+            color: white;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            color: white !important;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* Contenido principal */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .welcome-card {
+            background: linear-gradient(145deg, #4f46e5, #7c3aed);
+            border-radius: 2rem;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-card h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-card p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        /* Tarjetas de cursos */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-image {
+            height: 160px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .course-info {
+            padding: 1.5rem;
+        }
+
+        .course-info h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            background: #4f46e5;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+        }
+
+        .progress {
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            .container {
+                padding: 0 1rem;
+            }
+            .welcome-card h1 {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <h2>Plataforma Educativa</h2>
+        </div>
+        <div class="nav-links">
+            <a href="/Cliente/dashboard">Inicio</a>
+            <a href="/Cliente/perfil">Mi Perfil</a>
+            <a href="/Cliente/cursos">Mis Cursos</a>
+            <div class="user-info">
+                <span id="nombreUsuario">Cliente</span>
+                <a href="http://localhost/plataforma/api.php?action=logout" class="logout-btn">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h1>Bienvenido, <span id="nombreBienvenida"></span></h1>
+            <p>Continúa aprendiendo desde donde lo dejaste. Aquí tienes tus cursos disponibles.</p>
+        </div>
+
+        <h2 class="section-title">Cursos disponibles</h2>
+        <div id="cursosDisponibles" class="courses-grid">
+            <!-- Aquí se cargarán los cursos -->
+        </div>
+    </div>
+
+    <script>
+        async function verificarAcceso() {
+            try {
+                const resp = await fetch('http://localhost/plataforma/api.php?action=verificar_sesion', {
+                    credentials: 'include'
+                });
+                const data = await resp.json();
+                if (!data.logged || data.rol !== 'cliente') {
+                    window.location.href = '/';
+                    return;
+                }
+                // Mostrar nombre del usuario
+                const nombreSpan = document.getElementById('nombreUsuario');
+                const nombreBienvenida = document.getElementById('nombreBienvenida');
+                if (nombreSpan && data.nombre) {
+                    nombreSpan.textContent = data.nombre;
+                    nombreBienvenida.textContent = data.nombre;
+                }
+            } catch (error) {
+                console.error('Error al verificar sesión:', error);
+                window.location.href = '/';
+            }
+        }
+
+        async function cargarCursos() {
+            try {
+                const resp = await fetch('http://localhost/plataforma/api.php?action=listar_cursos_cliente', {
+                    credentials: 'include'
+                });
+                const data = await resp.json();
+                const contenedor = document.getElementById('cursosDisponibles');
+                if (!data.success) {
+                    contenedor.innerHTML = '<p>No se pudieron cargar los cursos. Intenta más tarde.</p>';
+                    return;
+                }
+                if (data.cursos.length === 0) {
+                    contenedor.innerHTML = '<p>No hay cursos disponibles en este momento.</p>';
+                    return;
+                }
+                let html = '';
+                for (const curso of data.cursos) {
+                    // Icono o imagen según el curso (puede ser aleatorio o fijo)
+                    const iconos = ['📘', '📊', '💻', '🎨', '📈', '🤖'];
+                    const icono = iconos[curso.id % iconos.length];
+                    html += `
+                        <div class="course-card">
+                            <div class="course-image">${icono}</div>
+                            <div class="course-info">
+                                <h3>${escapeHtml(curso.nombre)}</h3>
+                                <div class="course-meta">
+                                    <a href="/Cliente/ver-curso?curso_id=${curso.id}" class="btn">Acceder al curso</a>
+                                    <span class="progress">Ver progreso</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                contenedor.innerHTML = html;
+            } catch (error) {
+                console.error('Error al cargar cursos:', error);
+                document.getElementById('cursosDisponibles').innerHTML = '<p>Error de conexión con el servidor.</p>';
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        verificarAcceso();
+        cargarCursos();
+    </script>
+</body>
+</html>

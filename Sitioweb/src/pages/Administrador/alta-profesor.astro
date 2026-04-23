@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta de Profesor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+        }
+        .sidebar {
+            width: 280px;
+            background: #0f172a;
+            color: #e2e8f0;
+            position: fixed;
+            height: 100vh;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        .sidebar h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: white;
+        }
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .sidebar a:hover {
+            background: #1e293b;
+            color: white;
+        }
+        .main {
+            margin-left: 280px;
+            padding: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            background: white;
+        }
+        button {
+            width: 100%;
+            padding: 0.85rem;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #4338ca;
+        }
+        .msg {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                padding: 1rem;
+                justify-content: center;
+            }
+            .sidebar h2 {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 0.75rem;
+            }
+            .sidebar a {
+                display: inline-block;
+                margin: 0 0.25rem;
+                font-size: 0.85rem;
+                padding: 0.5rem 0.75rem;
+            }
+            .main {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            .card {
+                margin: 0;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Administrador</h2>
+        <a href="/Administrador/dashboard">Inicio</a>
+        <a href="/Administrador/alta-profesor">Alta Profesor</a>
+        <a href="/Administrador/alta-curso">Alta Curso</a>
+        <a href="/Administrador/visualizaciones">Visualizaciones</a>
+        <a href="/Administrador/calificaciones">Calificaciones</a>
+        <a href="/Administrador/reportes">Reportes</a>
+        <a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+    </div>
+    <div class="main">
+        <div class="card">
+            <h2>Registrar nuevo profesor</h2>
+            <form id="formProfesor">
+                <input type="text" name="nombre" placeholder="Nombre completo" required>
+                <input type="email" name="correo" placeholder="Correo electrónico" required>
+                <input type="text" name="especialidad" placeholder="Especialidad" required>
+                <button type="submit">Guardar profesor</button>
+                <div id="mensaje" class="msg"></div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const form = document.getElementById('formProfesor');
+        const msgDiv = document.getElementById('mensaje');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const resp = await fetch('http://localhost/plataforma/api.php?action=alta_profesor', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+            const data = await resp.json();
+            msgDiv.className = 'msg';
+            if (data.success) {
+                msgDiv.classList.add('success');
+                msgDiv.innerText = 'Profesor registrado correctamente';
+                form.reset();
+            } else {
+                msgDiv.classList.add('error');
+                msgDiv.innerText = data.message || 'Error al registrar';
+            }
+            setTimeout(() => {
+                msgDiv.className = 'msg';
+                msgDiv.style.display = 'none';
+            }, 3000);
+            msgDiv.style.display = 'block';
+        });
+    </script>
+</body>
+</html>

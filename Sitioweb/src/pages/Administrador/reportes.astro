@@ -1,0 +1,71 @@
+---
+// src/pages/Administrador/reportes.astro
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte - Cursos más valorados</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', sans-serif; background:#f1f5f9; }
+        .sidebar { width:260px; background:#0f172a; color:white; position:fixed; height:100vh; padding:1.5rem; }
+        .sidebar a { display:block; color:#cbd5e1; padding:0.75rem; margin-bottom:0.5rem; border-radius:0.75rem; text-decoration:none; }
+        .main { margin-left:260px; padding:2rem; }
+        .card { background:white; border-radius:1.5rem; padding:1.5rem; overflow-x:auto; }
+        table { width:100%; border-collapse:collapse; min-width:600px; }
+        th, td { padding:1rem; text-align:left; border-bottom:1px solid #e2e8f0; }
+        .estrellas { color:#f59e0b; }
+        .top { background:#fef3c7; }
+        @media (max-width:768px) {
+            .sidebar { width:100%; height:auto; position:relative; display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem; padding:1rem; }
+            .sidebar a { display:inline-block; }
+            .main { margin-left:0; padding:1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Administrador</h2>
+        <a href="/Administrador/dashboard">Inicio</a>
+        <a href="/Administrador/alta-profesor">Alta Profesor</a>
+        <a href="/Administrador/alta-curso">Alta Curso</a>
+        <a href="/Administrador/visualizaciones">Visualizaciones</a>
+        <a href="/Administrador/calificaciones">Calificaciones</a>
+        <a href="/Administrador/reportes">Reportes</a>
+        <a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+    </div>
+    <div class="main">
+        <div class="card">
+            <h2>Cursos mejor calificados (promedio)</h2>
+            <div id="contenido">Cargando...</div>
+        </div>
+    </div>
+    <script>
+        async function cargar() {
+            const resp = await fetch('http://localhost/plataforma/api.php?action=reporte_cursos', { credentials: 'include' });
+            const data = await resp.json();
+            if (!data.success) {
+                document.getElementById('contenido').innerHTML = '<p>Error</p>';
+                return;
+            }
+            let html = `<table>`;
+            html += `<thead><tr><th>Posición</th><th>Curso</th><th>Promedio</th><th>Total calificaciones</th><th>Comentarios recientes</th></tr></thead><tbody>`;
+            data.cursos.forEach((curso, idx) => {
+                let estrellas = '★'.repeat(Math.round(curso.promedio)) + '☆'.repeat(5-Math.round(curso.promedio));
+                let comentariosHtml = curso.comentarios.slice(0,2).map(c => `"${c.comentario.substring(0,60)}" - ${c.usuario}`).join('<br>') || 'Sin comentarios';
+                html += `<tr class="${idx < 3 ? 'top' : ''}">
+                    <td>${idx+1}</td>
+                    <td>${curso.nombre}</td>
+                    <td class="estrellas">${estrellas} (${curso.promedio})</td>
+                    <td>${curso.total_calificaciones}</td>
+                    <td>${comentariosHtml}</td>
+                </tr>`;
+            });
+            html += `</tbody></table>`;
+            document.getElementById('contenido').innerHTML = html;
+        }
+        cargar();
+    </script>
+</body>
+</html>

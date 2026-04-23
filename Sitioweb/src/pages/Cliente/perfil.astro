@@ -1,0 +1,415 @@
+---
+// src/pages/Cliente/perfil.astro
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil | Plataforma Educativa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        /* Navbar (mismo estilo que dashboard) */
+        .navbar {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #1e293b;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+        }
+
+        .user-info span {
+            font-weight: 500;
+            color: white;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            color: white !important;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* Contenido principal */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-header p {
+            color: #475569;
+        }
+
+        .avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #4f46e5;
+            margin-bottom: 1rem;
+            background: #e2e8f0;
+        }
+
+        .avatar-input {
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            background: #f8fafc;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            background: white;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .msg {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            .container {
+                padding: 0 1rem;
+            }
+            .profile-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <h2>Plataforma Educativa</h2>
+        </div>
+        <div class="nav-links">
+            <a href="/Cliente/dashboard">Inicio</a>
+            <a href="/Cliente/perfil">Mi Perfil</a>
+            <a href="/Cliente/cursos">Mis Cursos</a>
+            <div class="user-info">
+                <span id="nombreUsuario">Cliente</span>
+                <button id="logoutBtn" class="logout-btn">Cerrar sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h1>Mi Perfil</h1>
+                <p>Gestiona tu información personal</p>
+            </div>
+
+            <form id="perfilForm">
+                <div class="avatar-section">
+                    <img id="avatarImg" class="avatar" src="/default-avatar.png" alt="Avatar">
+                    <div class="avatar-input">
+                        <label for="imagenInput">Cambiar foto de perfil:</label>
+                        <input type="file" id="imagenInput" accept="image/jpeg,image/png,image/jpg">
+                        <small>Formatos: JPG, PNG (máx. 2MB)</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" id="nombre" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="correo" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label>Nueva contraseña (dejar en blanco si no se cambia)</label>
+                    <input type="password" id="nuevaPassword" placeholder="Nueva contraseña">
+                </div>
+
+                <div class="form-group">
+                    <label>Confirmar nueva contraseña</label>
+                    <input type="password" id="confirmarPassword" placeholder="Confirmar contraseña">
+                </div>
+
+                <div class="form-group">
+                    <label>Tema de la interfaz</label>
+                    <select id="tema">
+                        <option value="claro">Claro</option>
+                        <option value="oscuro">Oscuro</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary">Guardar cambios</button>
+                <div id="mensaje" class="msg"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let usuarioId = null;
+        let imagenBase64 = null;
+
+        async function cargarPerfil() {
+            try {
+                const resp = await fetch('http://localhost/plataforma/api.php?action=obtener_perfil', {
+                    credentials: 'include'
+                });
+                const data = await resp.json();
+                if (!data.success) {
+                    window.location.href = '/';
+                    return;
+                }
+                const perfil = data.perfil;
+                document.getElementById('nombre').value = perfil.nombre || '';
+                document.getElementById('correo').value = perfil.correo || '';
+                document.getElementById('tema').value = perfil.tema || 'claro';
+                document.getElementById('nombreUsuario').innerText = perfil.nombre || 'Cliente';
+                if (perfil.imagen_perfil && perfil.imagen_perfil !== 'default.png') {
+                    document.getElementById('avatarImg').src = 'http://localhost/plataforma/uploads/' + perfil.imagen_perfil;
+                } else {
+                    document.getElementById('avatarImg').src = 'https://ui-avatars.com/api/?background=4f46e5&color=fff&name=' + encodeURIComponent(perfil.nombre || 'Usuario');
+                }
+                // Aplicar tema
+                aplicarTema(perfil.tema);
+            } catch (error) {
+                console.error('Error al cargar perfil:', error);
+                window.location.href = '/';
+            }
+        }
+
+        function aplicarTema(tema) {
+            if (tema === 'oscuro') {
+                document.body.style.background = '#0f172a';
+                document.body.style.color = '#e2e8f0';
+                const cards = document.querySelectorAll('.profile-card');
+                cards.forEach(card => card.style.background = '#1e293b');
+            } else {
+                document.body.style.background = '#f1f5f9';
+                document.body.style.color = '#0f172a';
+                const cards = document.querySelectorAll('.profile-card');
+                cards.forEach(card => card.style.background = 'white');
+            }
+        }
+
+        document.getElementById('imagenInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                mostrarMensaje('Solo se permiten imágenes', 'error');
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                mostrarMensaje('La imagen no debe superar los 2MB', 'error');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                imagenBase64 = reader.result;
+                document.getElementById('avatarImg').src = imagenBase64;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('perfilForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nuevaPassword = document.getElementById('nuevaPassword').value;
+            const confirmar = document.getElementById('confirmarPassword').value;
+            if (nuevaPassword !== confirmar) {
+                mostrarMensaje('Las contraseñas no coinciden', 'error');
+                return;
+            }
+            const tema = document.getElementById('tema').value;
+            const formData = new FormData();
+            formData.append('action', 'actualizar_perfil');
+            if (nuevaPassword) formData.append('nueva_contraseña', nuevaPassword);
+            if (tema) formData.append('tema', tema);
+            if (imagenBase64) formData.append('imagen', imagenBase64);
+            try {
+                const resp = await fetch('http://localhost/plataforma/api.php', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    mostrarMensaje('Perfil actualizado correctamente', 'success');
+                    aplicarTema(tema);
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    mostrarMensaje(data.message || 'Error al actualizar', 'error');
+                }
+            } catch (error) {
+                mostrarMensaje('Error de conexión', 'error');
+            }
+        });
+
+        function mostrarMensaje(texto, tipo) {
+            const msgDiv = document.getElementById('mensaje');
+            msgDiv.textContent = texto;
+            msgDiv.className = `msg ${tipo}`;
+            setTimeout(() => {
+                msgDiv.className = 'msg';
+                msgDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Cierre de sesión con redirección
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await fetch('http://localhost/plataforma/api.php?action=logout', { credentials: 'include' });
+                window.location.href = '/';
+            } catch (error) {
+                window.location.href = '/';
+            }
+        });
+
+        cargarPerfil();
+    </script>
+</body>
+</html>

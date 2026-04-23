@@ -1,0 +1,53 @@
+---
+// src/pages/Cliente/cursos.astro
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Cursos</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background:#f1f5f9; margin:0; }
+        .navbar { background:#0f172a; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+        .navbar a { color:white; text-decoration:none; margin-left:1rem; }
+        .container { padding:2rem; max-width:1200px; margin:0 auto; }
+        .course-card { background:white; border-radius:1rem; padding:1.5rem; margin-bottom:1rem; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+        .btn { background:#4f46e5; color:white; padding:0.5rem 1rem; border-radius:0.5rem; text-decoration:none; display:inline-block; }
+        @media (max-width:768px) { .container { padding:1rem; } .navbar { flex-direction:column; gap:0.5rem; } }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Plataforma Educativa</h2>
+        <div>
+            <a href="/Cliente/dashboard">Inicio</a>
+            <a href="/Cliente/perfil">Mi Perfil</a>
+            <a href="/Cliente/cursos">Mis Cursos</a>
+            <a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Cursos disponibles</h1>
+        <div id="listaCursos">Cargando...</div>
+    </div>
+    <script>
+        async function cargarCursos() {
+            const resp = await fetch('http://localhost/plataforma/api.php?action=listar_cursos_cliente', { credentials: 'include' });
+            const data = await resp.json();
+            if (!data.success) {
+                document.getElementById('listaCursos').innerHTML = '<p>No se pudieron cargar los cursos o no estás autenticado.</p>';
+                return;
+            }
+            let html = '';
+            for (let curso of data.cursos) {
+                html += `<div class="course-card">
+                            <h3>${curso.nombre}</h3>
+                            <a href="/Cliente/ver-curso?curso_id=${curso.id}" class="btn">Acceder al curso</a>
+                         </div>`;
+            }
+            document.getElementById('listaCursos').innerHTML = html;
+        }
+        cargarCursos();
+    </script>
+</body>
+</html>

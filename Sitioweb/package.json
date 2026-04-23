@@ -1,5 +1,5 @@
 {
-  "name": "plataforma",
+  "name": "flaky-force",
   "type": "module",
   "version": "0.0.1",
   "engines": {
@@ -12,6 +12,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.1.8"
+    "astro": "^6.1.9"
   }
 }
