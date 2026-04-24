@@ -1,0 +1,453 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Profesores">
+
+    <div class="page-header">
+        <div>
+            <h2>Gestión de Profesores</h2>
+            <p>Administra los profesores de la plataforma</p>
+        </div>
+        <button class="btn-primary" onclick="abrirModal()">
+            + Nuevo Profesor
+        </button>
+    </div>
+
+    <!-- TABLA -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Lista de Profesores</h3>
+            <input type="text" id="buscador" placeholder="Buscar profesor..." class="input-search" oninput="buscarProfesor()">
+        </div>
+        <div class="card-body">
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Especialidad</th>
+                        <th>Fecha de registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-profesores">
+                    <tr>
+                        <td colspan="6" class="empty">Cargando...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal" onclick="cerrarModalOverlay(event)">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-titulo">Nuevo Profesor</h3>
+                <button class="modal-close" onclick="cerrarModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="profesor-id">
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" id="nombre" placeholder="Ej. Juan García" class="input">
+                </div>
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="correo" placeholder="correo@ejemplo.com" class="input">
+                </div>
+                <div class="form-group">
+                    <label>Especialidad</label>
+                    <input type="text" id="especialidad" placeholder="Ej. Desarrollo Web" class="input">
+                </div>
+                <div id="mensaje-error" class="mensaje-error" style="display:none"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn-primary" onclick="guardarProfesor()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+</AdminLayout>
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .page-header h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e1e2d;
+    }
+
+    .page-header p {
+        color: #9ca3af;
+        font-size: 0.82rem;
+        margin-top: 2px;
+    }
+
+    .btn-primary {
+        background: #e94560;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .btn-primary:hover { background: #c62a47; }
+
+    .btn-secondary {
+        background: #f5f6fa;
+        color: #555;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .btn-secondary:hover { background: #e9ecef; }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        border: 1px solid #f0f0f0;
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 18px 22px;
+        border-bottom: 1px solid #f5f6fa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-header h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #1e1e2d;
+    }
+
+    .input-search {
+        padding: 8px 14px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        outline: none;
+        width: 220px;
+        transition: border 0.2s;
+    }
+
+    .input-search:focus { border-color: #e94560; }
+
+    .card-body { padding: 0; }
+
+    .tabla {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+    }
+
+    .tabla th {
+        padding: 12px 18px;
+        text-align: left;
+        color: #9ca3af;
+        font-weight: 500;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: #fafafa;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .tabla td {
+        padding: 14px 18px;
+        border-bottom: 1px solid #f9fafb;
+        color: #374151;
+    }
+
+    .tabla tr:last-child td { border-bottom: none; }
+    .tabla tr:hover td { background: #fafafa; }
+
+    .empty {
+        text-align: center;
+        color: #9ca3af;
+        padding: 30px !important;
+    }
+
+    .badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: #e8f0fe;
+        color: #3b82f6;
+    }
+
+    .btn-edit {
+        background: #e8f0fe;
+        color: #3b82f6;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        margin-right: 6px;
+        transition: background 0.2s;
+    }
+
+    .btn-edit:hover { background: #d0e2ff; }
+
+    .btn-delete {
+        background: #fde8ec;
+        color: #e94560;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .btn-delete:hover { background: #fac8d0; }
+
+    /* MODAL */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-overlay.show { display: flex; }
+
+    .modal {
+        background: white;
+        border-radius: 14px;
+        width: 100%;
+        max-width: 460px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .modal-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1e1e2d;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 1rem;
+        color: #aaa;
+        cursor: pointer;
+        padding: 4px;
+    }
+
+    .modal-close:hover { color: #555; }
+
+    .modal-body { padding: 24px; }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 6px;
+    }
+
+    .input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        outline: none;
+        transition: border 0.2s;
+        color: #1e1e2d;
+    }
+
+    .input:focus { border-color: #e94560; }
+
+    .modal-footer {
+        padding: 16px 24px;
+        border-top: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .mensaje-error {
+        background: #fde8ec;
+        color: #e94560;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        margin-top: 10px;
+    }
+</style>
+
+<script>
+    (window as any).abrirModal = abrirModal;
+    (window as any).cerrarModal = cerrarModal;
+    (window as any).cerrarModalOverlay = cerrarModalOverlay;
+    (window as any).editarProfesor = editarProfesor;
+    (window as any).guardarProfesor = guardarProfesor;
+    (window as any).eliminarProfesor = eliminarProfesor;
+    (window as any).buscarProfesor = buscarProfesor;
+
+let profesores: any[] = [];
+
+    async function cargarProfesores() {
+        try {
+            const res = await fetch('/php/profesores.php?action=listar');
+            const data = await res.json();
+            profesores = data;
+            renderTabla(data);
+        } catch(e) {
+            document.getElementById('tabla-profesores').innerHTML =
+                '<tr><td colspan="6" class="empty">Sin conexión al servidor</td></tr>';
+        }
+    }
+
+    function renderTabla(data) {
+        const tbody = document.getElementById('tabla-profesores');
+        if (data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="empty">No hay profesores registrados</td></tr>';
+            return;
+        }
+        tbody.innerHTML = data.map((p, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td><strong>${p.nombre}</strong></td>
+                <td>${p.correo}</td>
+                <td><span class="badge">${p.especialidad}</span></td>
+                <td>${new Date(p.created_at).toLocaleDateString('es-MX')}</td>
+                <td>
+                    <button class="btn-edit" onclick="editarProfesor(${p.id})">Editar</button>
+                    <button class="btn-delete" onclick="eliminarProfesor(${p.id})">Eliminar</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function buscarProfesor() {
+        const termino = document.getElementById('buscador').value.toLowerCase();
+        const filtrados = profesores.filter(p =>
+            p.nombre.toLowerCase().includes(termino) ||
+            p.correo.toLowerCase().includes(termino) ||
+            p.especialidad.toLowerCase().includes(termino)
+        );
+        renderTabla(filtrados);
+    }
+
+    function abrirModal() {
+        document.getElementById('modal-titulo').textContent = 'Nuevo Profesor';
+        document.getElementById('profesor-id').value = '';
+        document.getElementById('nombre').value = '';
+        document.getElementById('correo').value = '';
+        document.getElementById('especialidad').value = '';
+        document.getElementById('mensaje-error').style.display = 'none';
+        document.getElementById('modal').classList.add('show');
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal').classList.remove('show');
+    }
+
+    function cerrarModalOverlay(e) {
+        if (e.target.id === 'modal') cerrarModal();
+    }
+
+    function editarProfesor(id) {
+        const p = profesores.find(x => x.id == id);
+        if (!p) return;
+        document.getElementById('modal-titulo').textContent = 'Editar Profesor';
+        document.getElementById('profesor-id').value = p.id;
+        document.getElementById('nombre').value = p.nombre;
+        document.getElementById('correo').value = p.correo;
+        document.getElementById('especialidad').value = p.especialidad;
+        document.getElementById('mensaje-error').style.display = 'none';
+        document.getElementById('modal').classList.add('show');
+    }
+
+    async function guardarProfesor() {
+        const id = document.getElementById('profesor-id').value;
+        const nombre = document.getElementById('nombre').value.trim();
+        const correo = document.getElementById('correo').value.trim();
+        const especialidad = document.getElementById('especialidad').value.trim();
+        const errorDiv = document.getElementById('mensaje-error');
+
+        if (!nombre || !correo || !especialidad) {
+            errorDiv.textContent = 'Todos los campos son obligatorios';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        try {
+            const res = await fetch('/php/profesores.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: id ? 'editar' : 'crear', id, nombre, correo, especialidad })
+            });
+            const data = await res.json();
+            if (data.success) {
+                cerrarModal();
+                cargarProfesores();
+            } else {
+                errorDiv.textContent = data.mensaje || 'Error al guardar';
+                errorDiv.style.display = 'block';
+            }
+        } catch(e) {
+            errorDiv.textContent = 'Error de conexión con el servidor';
+            errorDiv.style.display = 'block';
+        }
+    }
+
+    async function eliminarProfesor(id) {
+        if (!confirm('¿Estás segura de eliminar este profesor?')) return;
+        try {
+            const res = await fetch('/php/profesores.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'eliminar', id })
+            });
+            const data = await res.json();
+            if (data.success) cargarProfesores();
+        } catch(e) {
+            alert('Error de conexión');
+        }
+    }
+
+    cargarProfesores();
+</script>

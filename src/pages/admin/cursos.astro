@@ -1,0 +1,381 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Cursos">
+
+    <div class="page-header">
+        <div>
+            <h2>Gestión de Cursos</h2>
+            <p>Administra los cursos de la plataforma</p>
+        </div>
+        <button class="btn-primary" onclick="abrirModal()">
+            + Nuevo Curso
+        </button>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Lista de Cursos</h3>
+            <input type="text" id="buscador" placeholder="Buscar curso..." class="input-search" oninput="buscarCurso()">
+        </div>
+        <div class="card-body">
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre del Curso</th>
+                        <th>Profesor</th>
+                        <th>Videos</th>
+                        <th>Calificación</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-cursos">
+                    <tr><td colspan="7" class="empty">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODAL CURSO -->
+    <div class="modal-overlay" id="modal" onclick="cerrarModalOverlay(event)">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-titulo">Nuevo Curso</h3>
+                <button class="modal-close" onclick="cerrarModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="curso-id">
+                <div class="form-group">
+                    <label>Nombre del curso</label>
+                    <input type="text" id="nombre" placeholder="Ej. Introducción a Python" class="input">
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="descripcion" placeholder="Descripción del curso..." class="input textarea"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Profesor</label>
+                    <select id="profesor_id" class="input">
+                        <option value="">Seleccionar profesor...</option>
+                    </select>
+                </div>
+                <div id="mensaje-error" class="mensaje-error" style="display:none"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn-primary" onclick="guardarCurso()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VIDEOS -->
+    <div class="modal-overlay" id="modal-videos" onclick="cerrarVideosOverlay(event)">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 id="titulo-videos">Videos del Curso</h3>
+                <button class="modal-close" onclick="cerrarVideos()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="add-video-form">
+                    <input type="hidden" id="video-curso-id">
+                    <input type="text" id="video-titulo" placeholder="Título del video" class="input">
+                    <input type="text" id="video-url" placeholder="URL del video (YouTube, etc.)" class="input" style="margin-top:10px">
+                    <button class="btn-primary" style="margin-top:10px; width:100%" onclick="agregarVideo()">+ Agregar Video</button>
+                </div>
+                <div id="lista-videos" style="margin-top:20px"></div>
+            </div>
+        </div>
+    </div>
+
+</AdminLayout>
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+    .page-header h2 { font-size: 1.1rem; font-weight: 600; color: #1e1e2d; }
+    .page-header p { color: #9ca3af; font-size: 0.82rem; margin-top: 2px; }
+
+    .btn-primary {
+        background: #e94560; color: white; border: none;
+        padding: 10px 20px; border-radius: 8px;
+        font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #c62a47; }
+
+    .btn-secondary {
+        background: #f5f6fa; color: #555; border: none;
+        padding: 10px 20px; border-radius: 8px;
+        font-size: 0.875rem; font-weight: 500; cursor: pointer;
+    }
+    .btn-secondary:hover { background: #e9ecef; }
+
+    .btn-videos {
+        background: #e8f8f0; color: #10b981; border: none;
+        padding: 6px 14px; border-radius: 6px;
+        font-size: 0.8rem; cursor: pointer; margin-right: 6px;
+    }
+    .btn-edit {
+        background: #e8f0fe; color: #3b82f6; border: none;
+        padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; margin-right: 6px;
+    }
+    .btn-delete {
+        background: #fde8ec; color: #e94560; border: none;
+        padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;
+    }
+
+    .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; overflow: hidden; }
+    .card-header { padding: 18px 22px; border-bottom: 1px solid #f5f6fa; display: flex; justify-content: space-between; align-items: center; }
+    .card-header h3 { font-size: 0.95rem; font-weight: 600; color: #1e1e2d; }
+    .input-search { padding: 8px 14px; border: 1px solid #e9ecef; border-radius: 8px; font-size: 0.875rem; outline: none; width: 220px; }
+    .input-search:focus { border-color: #e94560; }
+    .card-body { padding: 0; }
+
+    .tabla { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    .tabla th { padding: 12px 18px; text-align: left; color: #9ca3af; font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
+    .tabla td { padding: 14px 18px; border-bottom: 1px solid #f9fafb; color: #374151; }
+    .tabla tr:last-child td { border-bottom: none; }
+    .tabla tr:hover td { background: #fafafa; }
+    .empty { text-align: center; color: #9ca3af; padding: 30px !important; }
+
+    .badge-videos { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; background: #e8f8f0; color: #10b981; }
+    .badge-rating { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; background: #fef9e7; color: #f59e0b; }
+
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: white; border-radius: 14px; width: 100%; max-width: 460px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+    .modal-lg { max-width: 560px; }
+    .modal-header { padding: 20px 24px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h3 { font-size: 1rem; font-weight: 600; color: #1e1e2d; }
+    .modal-close { background: none; border: none; font-size: 1rem; color: #aaa; cursor: pointer; }
+    .modal-body { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid #f0f0f0; display: flex; justify-content: flex-end; gap: 10px; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.82rem; font-weight: 500; color: #374151; margin-bottom: 6px; }
+    .input { width: 100%; padding: 10px 14px; border: 1px solid #e9ecef; border-radius: 8px; font-size: 0.875rem; outline: none; color: #1e1e2d; }
+    .input:focus { border-color: #e94560; }
+    .textarea { height: 90px; resize: vertical; }
+
+    .mensaje-error { background: #fde8ec; color: #e94560; padding: 10px 14px; border-radius: 8px; font-size: 0.82rem; margin-top: 10px; }
+
+    .video-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f9fafb; border-radius: 8px; margin-bottom: 8px; }
+    .video-item span { font-size: 0.875rem; color: #374151; }
+    .video-seq { background: #e94560; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; margin-right: 10px; flex-shrink: 0; }
+
+    .add-video-form { background: #f9fafb; padding: 16px; border-radius: 10px; }
+</style>
+
+<script>
+    (window as any).abrirModal = abrirModal;
+    (window as any).cerrarModal = cerrarModal;
+    (window as any).cerrarModalOverlay = cerrarModalOverlay;
+    (window as any).editarCurso = editarCurso;
+    (window as any).guardarCurso = guardarCurso;
+    (window as any).eliminarCurso = eliminarCurso;
+    (window as any).buscarCurso = buscarCurso;
+    (window as any).abrirVideos = abrirVideos;
+    (window as any).cerrarVideos = cerrarVideos;
+    (window as any).cerrarVideosOverlay = cerrarVideosOverlay;
+    (window as any).agregarVideo = agregarVideo;
+    (window as any).eliminarVideo = eliminarVideo;
+
+    let cursos: any[] = [];
+    let cursoIdActual: any = null;
+
+    async function cargarCursos() {
+        try {
+            const res = await fetch('/php/cursos.php?action=listar');
+            const data = await res.json();
+            cursos = data;
+            renderTabla(data);
+        } catch(e) {
+            document.getElementById('tabla-cursos').innerHTML =
+                '<tr><td colspan="7" class="empty">Sin conexión al servidor</td></tr>';
+        }
+    }
+
+    function renderTabla(data) {
+        const tbody = document.getElementById('tabla-cursos');
+        if (data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="empty">No hay cursos registrados</td></tr>';
+            return;
+        }
+        tbody.innerHTML = data.map((c, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td><strong>${c.nombre}</strong><br><small style="color:#9ca3af">${c.descripcion?.substring(0,40) || ''}...</small></td>
+                <td>${c.profesor}</td>
+                <td><span class="badge-videos">${c.total_videos || 0} videos</span></td>
+                <td><span class="badge-rating">${c.calificacion || '0.0'} / 5.0</span></td>
+                <td>${new Date(c.created_at).toLocaleDateString('es-MX')}</td>
+                <td>
+                    <button class="btn-videos" onclick="abrirVideos(${c.id}, '${c.nombre}')">Videos</button>
+                    <button class="btn-edit" onclick="editarCurso(${c.id})">Editar</button>
+                    <button class="btn-delete" onclick="eliminarCurso(${c.id})">Eliminar</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function buscarCurso() {
+        const t = document.getElementById('buscador').value.toLowerCase();
+        renderTabla(cursos.filter(c => c.nombre.toLowerCase().includes(t) || c.profesor.toLowerCase().includes(t)));
+    }
+
+    async function cargarProfesoresSelect() {
+        try {
+            const res = await fetch('/php/profesores.php?action=listar');
+            const data = await res.json();
+            const select = document.getElementById('profesor_id');
+            select.innerHTML = '<option value="">Seleccionar profesor...</option>';
+            data.forEach(p => {
+                select.innerHTML += `<option value="${p.id}">${p.nombre}</option>`;
+            });
+        } catch(e) {}
+    }
+
+    function abrirModal() {
+        document.getElementById('modal-titulo').textContent = 'Nuevo Curso';
+        document.getElementById('curso-id').value = '';
+        document.getElementById('nombre').value = '';
+        document.getElementById('descripcion').value = '';
+        document.getElementById('profesor_id').value = '';
+        document.getElementById('mensaje-error').style.display = 'none';
+        cargarProfesoresSelect();
+        document.getElementById('modal').classList.add('show');
+    }
+
+    function cerrarModal() { document.getElementById('modal').classList.remove('show'); }
+    function cerrarModalOverlay(e) { if (e.target.id === 'modal') cerrarModal(); }
+
+    function editarCurso(id) {
+        const c = cursos.find(x => x.id == id);
+        if (!c) return;
+        document.getElementById('modal-titulo').textContent = 'Editar Curso';
+        document.getElementById('curso-id').value = c.id;
+        document.getElementById('nombre').value = c.nombre;
+        document.getElementById('descripcion').value = c.descripcion;
+        document.getElementById('mensaje-error').style.display = 'none';
+        cargarProfesoresSelect().then(() => {
+            document.getElementById('profesor_id').value = c.profesor_id;
+        });
+        document.getElementById('modal').classList.add('show');
+    }
+
+    async function guardarCurso() {
+        const id = document.getElementById('curso-id').value;
+        const nombre = document.getElementById('nombre').value.trim();
+        const descripcion = document.getElementById('descripcion').value.trim();
+        const profesor_id = document.getElementById('profesor_id').value;
+        const errorDiv = document.getElementById('mensaje-error');
+
+        if (!nombre || !profesor_id) {
+            errorDiv.textContent = 'Nombre y profesor son obligatorios';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        try {
+            const res = await fetch('/php/cursos.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: id ? 'editar' : 'crear', id, nombre, descripcion, profesor_id })
+            });
+            const data = await res.json();
+            if (data.success) { cerrarModal(); cargarCursos(); }
+            else { errorDiv.textContent = data.mensaje || 'Error al guardar'; errorDiv.style.display = 'block'; }
+        } catch(e) {
+            errorDiv.textContent = 'Error de conexión'; errorDiv.style.display = 'block';
+        }
+    }
+
+    async function eliminarCurso(id) {
+        if (!confirm('¿Eliminar este curso?')) return;
+        try {
+            const res = await fetch('/php/cursos.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'eliminar', id })
+            });
+            const data = await res.json();
+            if (data.success) cargarCursos();
+        } catch(e) {}
+    }
+
+    async function abrirVideos(cursoId, nombreCurso) {
+        cursoIdActual = cursoId;
+        document.getElementById('titulo-videos').textContent = `Videos: ${nombreCurso}`;
+        document.getElementById('video-curso-id').value = cursoId;
+        document.getElementById('video-titulo').value = '';
+        document.getElementById('video-url').value = '';
+        await cargarVideos(cursoId);
+        document.getElementById('modal-videos').classList.add('show');
+    }
+
+    function cerrarVideos() { document.getElementById('modal-videos').classList.remove('show'); }
+    function cerrarVideosOverlay(e) { if (e.target.id === 'modal-videos') cerrarVideos(); }
+
+    async function cargarVideos(cursoId) {
+        try {
+            const res = await fetch(`/php/cursos.php?action=videos&curso_id=${cursoId}`);
+            const data = await res.json();
+            const lista = document.getElementById('lista-videos');
+            if (data.length === 0) {
+                lista.innerHTML = '<p style="text-align:center;color:#9ca3af;font-size:0.875rem">Sin videos aún</p>';
+                return;
+            }
+            lista.innerHTML = data.map(v => `
+                <div class="video-item">
+                    <div style="display:flex;align-items:center">
+                        <div class="video-seq">${v.secuencia}</div>
+                        <span>${v.titulo}</span>
+                    </div>
+                    <button class="btn-delete" onclick="eliminarVideo(${v.id})">Eliminar</button>
+                </div>
+            `).join('');
+        } catch(e) {}
+    }
+
+    async function agregarVideo() {
+        const titulo = document.getElementById('video-titulo').value.trim();
+        const url = document.getElementById('video-url').value.trim();
+        const curso_id = document.getElementById('video-curso-id').value;
+        if (!titulo || !url) { alert('Completa título y URL del video'); return; }
+        try {
+            const res = await fetch('/php/cursos.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'agregar_video', curso_id, titulo, url })
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('video-titulo').value = '';
+                document.getElementById('video-url').value = '';
+                await cargarVideos(curso_id);
+                cargarCursos();
+            }
+        } catch(e) {}
+    }
+
+    async function eliminarVideo(id) {
+        if (!confirm('¿Eliminar este video?')) return;
+        try {
+            const res = await fetch('/php/cursos.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'eliminar_video', id })
+            });
+            const data = await res.json();
+            if (data.success) await cargarVideos(cursoIdActual);
+        } catch(e) {}
+    }
+
+    cargarCursos();
+</script>

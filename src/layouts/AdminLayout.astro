@@ -1,0 +1,342 @@
+---
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | Panel Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f6fa;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            background: #1e1e2d;
+            color: white;
+            padding: 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-logo {
+            padding: 28px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .sidebar-logo h2 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-logo h2 span {
+            color: #e94560;
+        }
+
+        .sidebar-logo p {
+            color: rgba(255,255,255,0.35);
+            font-size: 0.75rem;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-section {
+            padding: 20px 16px 8px;
+        }
+
+        .sidebar-section-title {
+            color: rgba(255,255,255,0.25);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0 8px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 2px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 16px;
+            color: rgba(255,255,255,0.55);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            font-weight: 400;
+        }
+
+        .sidebar-menu a i {
+            width: 18px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(255,255,255,0.06);
+            color: #ffffff;
+        }
+
+        .sidebar-menu a.active {
+            background: #e94560;
+            color: white;
+            font-weight: 500;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 16px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .sidebar-footer a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 16px;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .sidebar-footer a:hover {
+            background: rgba(233,69,96,0.15);
+            color: #e94560;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: white;
+            padding: 0 30px;
+            height: 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 0 #e9ecef;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-left h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e1e2d;
+        }
+
+        .navbar-left p {
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-top: 2px;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: #f5f6fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .navbar-icon:hover {
+            background: #e9ecef;
+            color: #555;
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .navbar-user .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e94560, #c62a47);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .navbar-user .user-info {
+            line-height: 1.3;
+        }
+
+        .navbar-user .user-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e1e2d;
+        }
+
+        .navbar-user .user-role {
+            font-size: 0.72rem;
+            color: #aaa;
+        }
+
+        /* PAGE CONTENT */
+        .page-content {
+            padding: 28px 30px;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <h2>Edu<span>Platform</span></h2>
+            <p>Panel Administrador</p>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="sidebar-section-title">Principal</p>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/admin" class={Astro.url.pathname === '/admin' ? 'active' : ''}>
+                        <i class="fas fa-chart-pie"></i>
+                        Dashboard
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="sidebar-section-title">Gestión</p>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/admin/profesores" class={Astro.url.pathname === '/admin/profesores' ? 'active' : ''}>
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        Profesores
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/cursos" class={Astro.url.pathname === '/admin/cursos' ? 'active' : ''}>
+                        <i class="fas fa-book-open"></i>
+                        Cursos
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="sidebar-section-title">Análisis</p>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/admin/reportes" class={Astro.url.pathname === '/admin/reportes' ? 'active' : ''}>
+                        <i class="fas fa-chart-bar"></i>
+                        Reportes
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="sidebar-section-title">Configuración</p>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="/admin/nuevo-admin" class={Astro.url.pathname === '/admin/nuevo-admin' ? 'active' : ''}>
+                        <i class="fas fa-user-shield"></i>
+                        Nuevo Admin
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="/login">
+                <i class="fas fa-sign-out-alt"></i>
+                Cerrar Sesión
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-content">
+        <nav class="navbar">
+            <div class="navbar-left">
+                <h1>{title}</h1>
+                <p>Panel de administración</p>
+            </div>
+            <div class="navbar-right">
+                <button class="navbar-icon">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button class="navbar-icon">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="navbar-user">
+                    <div class="avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Super Admin</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="page-content">
+            <slot />
+        </div>
+    </div>
+
+</body>
+</html>
