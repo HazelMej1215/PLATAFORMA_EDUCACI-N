@@ -1,5 +1,12 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
+
+if (typeof localStorage !== 'undefined') {
+    const admin = sessionStorage.getItem('admin');
+    if (!admin) {
+        return Astro.redirect('/login');
+    }
+}
 ---
 
 <AdminLayout title="Profesores">

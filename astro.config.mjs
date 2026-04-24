@@ -10,6 +10,7 @@ export default defineConfig({
         '/php': {
           target: 'http://localhost/Plataforma',
           changeOrigin: true,
+          secure: false,
           rewrite: (path) => path
         }
       }

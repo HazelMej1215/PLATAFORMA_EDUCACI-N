@@ -1,0 +1,599 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduPlatform | Crear Cuenta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            background: #f5f6fa;
+        }
+
+        .left-panel {
+            width: 45%;
+            background: linear-gradient(135deg, #1e1e2d 0%, #2d1b3d 50%, #1a1a2e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(233,69,96,0.12) 0%, transparent 70%);
+            top: -150px;
+            right: -150px;
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
+            bottom: -80px;
+            left: -80px;
+        }
+
+        .brand {
+            text-align: center;
+            z-index: 1;
+            margin-bottom: 48px;
+        }
+
+        .brand-logo {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #e94560, #c62a47);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            box-shadow: 0 10px 30px rgba(233,69,96,0.4);
+        }
+
+        .brand h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .brand h1 span { color: #e94560; }
+
+        .brand p {
+            color: rgba(255,255,255,0.45);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .steps {
+            z-index: 1;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .steps-title {
+            color: rgba(255,255,255,0.25);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .step-item:last-child { border-bottom: none; }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: rgba(233,69,96,0.2);
+            border: 1px solid rgba(233,69,96,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e94560;
+            font-size: 0.75rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-text strong {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+            margin-bottom: 2px;
+        }
+
+        .step-text span {
+            color: rgba(255,255,255,0.35);
+            font-size: 0.78rem;
+        }
+
+        .right-panel {
+            width: 55%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 60px;
+            overflow-y: auto;
+        }
+
+        .registro-box {
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .registro-box h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1e1e2d;
+            margin-bottom: 6px;
+        }
+
+        .registro-box .subtitle {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 32px;
+        }
+
+        .registro-box .subtitle a {
+            color: #e94560;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .registro-box .subtitle a:hover {
+            text-decoration: underline;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 7px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 11px 16px;
+            border: 1.5px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            outline: none;
+            color: #1e1e2d;
+            transition: border 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+
+        .input:focus {
+            border-color: #e94560;
+            box-shadow: 0 0 0 3px rgba(233,69,96,0.08);
+        }
+
+        .input.error {
+            border-color: #e94560;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 0;
+        }
+
+        .password-toggle:hover { color: #555; }
+
+        .requisitos {
+            background: #f9fafb;
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-top: -10px;
+            margin-bottom: 18px;
+        }
+
+        .requisito {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+
+        .requisito:last-child { margin-bottom: 0; }
+
+        .requisito.ok { color: #10b981; }
+
+        .requisito-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #d1d5db;
+            flex-shrink: 0;
+        }
+
+        .requisito.ok .requisito-dot { background: #10b981; }
+
+        .terminos {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .terminos input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+            accent-color: #e94560;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .terminos label {
+            font-size: 0.82rem;
+            color: #6b7280;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .terminos label a {
+            color: #e94560;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .btn-registro {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #e94560, #c62a47);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(233,69,96,0.3);
+        }
+
+        .btn-registro:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(233,69,96,0.4);
+        }
+
+        .btn-registro:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .divider {
+            text-align: center;
+            color: #d1d5db;
+            font-size: 0.82rem;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 44%;
+            height: 1px;
+            background: #e9ecef;
+        }
+
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+
+        .btn-login {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: #1e1e2d;
+            border: 1.5px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-login:hover {
+            border-color: #e94560;
+            color: #e94560;
+        }
+
+        .mensaje-error {
+            background: #fde8ec;
+            color: #e94560;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .mensaje-exito {
+            background: #e8f8f0;
+            color: #10b981;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            margin-bottom: 16px;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANEL IZQUIERDO -->
+    <div class="left-panel">
+        <div class="brand">
+            <div class="brand-logo">🎓</div>
+            <h1>Edu<span>Platform</span></h1>
+            <p>Únete a miles de estudiantes que ya están aprendiendo</p>
+        </div>
+
+        <div class="steps">
+            <p class="steps-title">Cómo funciona</p>
+
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-text">
+                    <strong>Crea tu cuenta</strong>
+                    <span>Regístrate gratis en menos de 1 minuto</span>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-text">
+                    <strong>Explora los cursos</strong>
+                    <span>Elige entre cientos de cursos disponibles</span>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-text">
+                    <strong>Aprende a tu ritmo</strong>
+                    <span>Accede desde cualquier dispositivo</span>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-text">
+                    <strong>Obtén tu certificado</strong>
+                    <span>Recibe reconocimiento al completar el curso</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL DERECHO -->
+    <div class="right-panel">
+        <div class="registro-box">
+            <h2>Crea tu cuenta</h2>
+            <p class="subtitle">
+                ¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a>
+            </p>
+
+            <div id="mensaje-error" class="mensaje-error"></div>
+            <div id="mensaje-exito" class="mensaje-exito"></div>
+
+            <div class="form-group">
+                <label>Nombre completo</label>
+                <input type="text" id="nombre" class="input" placeholder="Ej. María González">
+            </div>
+
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" id="correo" class="input" placeholder="correo@ejemplo.com">
+            </div>
+
+            <div class="form-group">
+                <label>Contraseña</label>
+                <div class="password-wrapper">
+                    <input type="password" id="contrasena" class="input" placeholder="Mínimo 6 caracteres" oninput="verificarPassword()">
+                    <button class="password-toggle" onclick="togglePassword('contrasena', this)" type="button">
+                        Mostrar
+                    </button>
+                </div>
+            </div>
+
+            <div class="requisitos" id="requisitos">
+                <div class="requisito" id="req-longitud">
+                    <div class="requisito-dot"></div>
+                    Mínimo 6 caracteres
+                </div>
+                <div class="requisito" id="req-mayuscula">
+                    <div class="requisito-dot"></div>
+                    Al menos una mayúscula
+                </div>
+                <div class="requisito" id="req-numero">
+                    <div class="requisito-dot"></div>
+                    Al menos un número
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Confirmar contraseña</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confirmar" class="input" placeholder="Repite tu contraseña">
+                    <button class="password-toggle" onclick="togglePassword('confirmar', this)" type="button">
+                        Mostrar
+                    </button>
+                </div>
+            </div>
+
+            <div class="terminos">
+                <input type="checkbox" id="terminos">
+                <label for="terminos">
+                    Acepto los <a href="#">Términos de Servicio</a> y la <a href="#">Política de Privacidad</a> de EduPlatform
+                </label>
+            </div>
+
+            <button class="btn-registro" onclick="registrarse()">
+                Crear cuenta gratis
+            </button>
+
+            <div class="divider">o</div>
+
+            <a href="/login" class="btn-login">
+                Ya tengo cuenta — Iniciar sesión
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    (window as any).registrarse = registrarse;
+    (window as any).togglePassword = togglePassword;
+    (window as any).verificarPassword = verificarPassword;
+
+    function togglePassword(inputId: string, btn: HTMLButtonElement) {
+        const input = document.getElementById(inputId) as HTMLInputElement;
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = 'Ocultar';
+        } else {
+            input.type = 'password';
+            btn.textContent = 'Mostrar';
+        }
+    }
+
+    function verificarPassword() {
+        const pass = (document.getElementById('contrasena') as HTMLInputElement).value;
+
+        const reqLongitud = document.getElementById('req-longitud')!;
+        const reqMayuscula = document.getElementById('req-mayuscula')!;
+        const reqNumero = document.getElementById('req-numero')!;
+
+        if (pass.length >= 6) reqLongitud.classList.add('ok');
+        else reqLongitud.classList.remove('ok');
+
+        if (/[A-Z]/.test(pass)) reqMayuscula.classList.add('ok');
+        else reqMayuscula.classList.remove('ok');
+
+        if (/[0-9]/.test(pass)) reqNumero.classList.add('ok');
+        else reqNumero.classList.remove('ok');
+    }
+
+    async function registrarse() {
+        const nombre = (document.getElementById('nombre') as HTMLInputElement).value.trim();
+        const correo = (document.getElementById('correo') as HTMLInputElement).value.trim();
+        const contrasena = (document.getElementById('contrasena') as HTMLInputElement).value;
+        const confirmar = (document.getElementById('confirmar') as HTMLInputElement).value;
+        const terminosCheck = (document.getElementById('terminos') as HTMLInputElement).checked;
+
+        const errorDiv = document.getElementById('mensaje-error')!;
+        const exitoDiv = document.getElementById('mensaje-exito')!;
+
+        errorDiv.style.display = 'none';
+        exitoDiv.style.display = 'none';
+
+        if (!nombre || !correo || !contrasena || !confirmar) {
+            errorDiv.textContent = 'Todos los campos son obligatorios';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        if (contrasena.length < 6) {
+            errorDiv.textContent = 'La contraseña debe tener mínimo 6 caracteres';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        if (contrasena !== confirmar) {
+            errorDiv.textContent = 'Las contraseñas no coinciden';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        if (!terminosCheck) {
+            errorDiv.textContent = 'Debes aceptar los términos y condiciones';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        try {
+            const res = await fetch('/php/registro.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre, correo, contrasena })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                exitoDiv.textContent = '¡Cuenta creada exitosamente! Redirigiendo...';
+                exitoDiv.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
+            } else {
+                errorDiv.textContent = data.mensaje || 'Error al crear la cuenta';
+                errorDiv.style.display = 'block';
+            }
+        } catch(e) {
+            errorDiv.textContent = 'Error de conexión con el servidor';
+            errorDiv.style.display = 'block';
+        }
+    }
+</script>

@@ -17,20 +17,22 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     <div class="card">
         <div class="card-header">
             <h3>Lista de Administradores</h3>
+            <span id="contador-admins" class="badge-count">0 admins</span>
         </div>
         <div class="card-body">
             <table class="tabla">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nombre</th>
+                        <th>Administrador</th>
                         <th>Correo</th>
                         <th>Fecha de registro</th>
+                        <th>Rol</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-admins">
-                    <tr><td colspan="5" class="empty">Cargando...</td></tr>
+                    <tr><td colspan="6" class="empty">Cargando...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -40,32 +42,64 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     <div class="modal-overlay" id="modal" onclick="cerrarModalOverlay(event)">
         <div class="modal">
             <div class="modal-header">
-                <h3>Nuevo Administrador</h3>
+                <div>
+                    <h3>Nuevo Administrador</h3>
+                    <p>Completa los datos para crear un nuevo admin</p>
+                </div>
                 <button class="modal-close" onclick="cerrarModal()">✕</button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="admin-id">
+
                 <div class="form-group">
                     <label>Nombre completo</label>
                     <input type="text" id="nombre" placeholder="Ej. María López" class="input">
                 </div>
+
                 <div class="form-group">
                     <label>Correo electrónico</label>
                     <input type="email" id="correo" placeholder="correo@ejemplo.com" class="input">
                 </div>
+
                 <div class="form-group">
                     <label>Contraseña</label>
-                    <input type="password" id="contrasena" placeholder="Mínimo 6 caracteres" class="input">
+                    <div class="input-wrapper">
+                        <input type="password" id="contrasena" placeholder="Mínimo 6 caracteres" class="input" oninput="verificarRequisitos()">
+                        <button type="button" class="toggle-pass" onclick="togglePass('contrasena', 'btn1')" id="btn1">Mostrar</button>
+                    </div>
                 </div>
+
+                <div class="requisitos" id="requisitos">
+                    <div class="requisito" id="req-longitud">
+                        <div class="req-dot"></div>
+                        Mínimo 6 caracteres
+                    </div>
+                    <div class="requisito" id="req-mayuscula">
+                        <div class="req-dot"></div>
+                        Al menos una mayúscula
+                    </div>
+                    <div class="requisito" id="req-numero">
+                        <div class="req-dot"></div>
+                        Al menos un número
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label>Confirmar contraseña</label>
-                    <input type="password" id="confirmar" placeholder="Repite la contraseña" class="input">
+                    <div class="input-wrapper">
+                        <input type="password" id="confirmar" placeholder="Repite la contraseña" class="input">
+                        <button type="button" class="toggle-pass" onclick="togglePass('confirmar', 'btn2')" id="btn2">Mostrar</button>
+                    </div>
                 </div>
+
                 <div id="mensaje-error" class="mensaje-error" style="display:none"></div>
                 <div id="mensaje-exito" class="mensaje-exito" style="display:none"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
-                <button class="btn-primary" onclick="guardarAdmin()">Crear Administrador</button>
+                <button class="btn-primary" onclick="guardarAdmin()">
+                    Crear Administrador
+                </button>
             </div>
         </div>
     </div>
@@ -96,96 +130,224 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     }
     .btn-secondary:hover { background: #e9ecef; }
 
-    .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; overflow: hidden; }
-    .card-header { padding: 18px 22px; border-bottom: 1px solid #f5f6fa; display: flex; justify-content: space-between; align-items: center; }
+    .card {
+        background: white; border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        border: 1px solid #f0f0f0; overflow: hidden;
+    }
+    .card-header {
+        padding: 18px 22px; border-bottom: 1px solid #f5f6fa;
+        display: flex; justify-content: space-between; align-items: center;
+    }
     .card-header h3 { font-size: 0.95rem; font-weight: 600; color: #1e1e2d; }
+    .badge-count {
+        background: #f0f0f0; color: #888;
+        padding: 4px 12px; border-radius: 20px;
+        font-size: 0.78rem; font-weight: 500;
+    }
     .card-body { padding: 0; }
 
     .tabla { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-    .tabla th { padding: 12px 18px; text-align: left; color: #9ca3af; font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
+    .tabla th {
+        padding: 12px 18px; text-align: left; color: #9ca3af;
+        font-weight: 500; font-size: 0.78rem; text-transform: uppercase;
+        letter-spacing: 0.5px; background: #fafafa; border-bottom: 1px solid #f0f0f0;
+    }
     .tabla td { padding: 14px 18px; border-bottom: 1px solid #f9fafb; color: #374151; }
     .tabla tr:last-child td { border-bottom: none; }
     .tabla tr:hover td { background: #fafafa; }
-    .empty { text-align: center; color: #9ca3af; padding: 30px !important; }
+    .empty { text-align: center; color: #9ca3af; padding: 40px !important; }
 
+    .admin-info { display: flex; align-items: center; gap: 12px; }
     .avatar-sm {
-        width: 34px; height: 34px; border-radius: 50%;
+        width: 38px; height: 38px; border-radius: 50%;
         background: linear-gradient(135deg, #e94560, #c62a47);
-        display: inline-flex; align-items: center; justify-content: center;
-        color: white; font-weight: 600; font-size: 0.85rem; margin-right: 10px;
-        vertical-align: middle;
+        display: flex; align-items: center; justify-content: center;
+        color: white; font-weight: 600; font-size: 0.9rem; flex-shrink: 0;
     }
+    .admin-nombre { font-weight: 600; color: #1e1e2d; font-size: 0.875rem; }
+    .admin-id { color: #9ca3af; font-size: 0.75rem; }
 
-    .badge-admin { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; background: #fde8ec; color: #e94560; }
+    .badge-admin {
+        padding: 4px 12px; border-radius: 20px;
+        font-size: 0.75rem; font-weight: 500;
+        background: #fde8ec; color: #e94560;
+    }
 
     .btn-delete {
         background: #fde8ec; color: #e94560; border: none;
         padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;
+        transition: background 0.2s;
     }
     .btn-delete:hover { background: #fac8d0; }
 
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; }
+    /* MODAL */
+    .modal-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.45); z-index: 1000;
+        align-items: center; justify-content: center;
+    }
     .modal-overlay.show { display: flex; }
-    .modal { background: white; border-radius: 14px; width: 100%; max-width: 460px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
-    .modal-header { padding: 20px 24px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+    .modal {
+        background: white; border-radius: 16px; width: 100%;
+        max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .modal-header {
+        padding: 22px 24px; border-bottom: 1px solid #f0f0f0;
+        display: flex; justify-content: space-between; align-items: flex-start;
+    }
     .modal-header h3 { font-size: 1rem; font-weight: 600; color: #1e1e2d; }
-    .modal-close { background: none; border: none; font-size: 1rem; color: #aaa; cursor: pointer; }
+    .modal-header p { font-size: 0.78rem; color: #9ca3af; margin-top: 3px; }
+    .modal-close {
+        background: #f5f6fa; border: none; width: 30px; height: 30px;
+        border-radius: 50%; color: #888; cursor: pointer; font-size: 0.85rem;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.2s;
+    }
+    .modal-close:hover { background: #e9ecef; color: #555; }
     .modal-body { padding: 24px; }
-    .modal-footer { padding: 16px 24px; border-top: 1px solid #f0f0f0; display: flex; justify-content: flex-end; gap: 10px; }
+    .modal-footer {
+        padding: 16px 24px; border-top: 1px solid #f0f0f0;
+        display: flex; justify-content: flex-end; gap: 10px;
+    }
 
-    .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; font-size: 0.82rem; font-weight: 500; color: #374151; margin-bottom: 6px; }
-    .input { width: 100%; padding: 10px 14px; border: 1px solid #e9ecef; border-radius: 8px; font-size: 0.875rem; outline: none; color: #1e1e2d; }
-    .input:focus { border-color: #e94560; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+        display: block; font-size: 0.82rem;
+        font-weight: 500; color: #374151; margin-bottom: 6px;
+    }
 
-    .mensaje-error { background: #fde8ec; color: #e94560; padding: 10px 14px; border-radius: 8px; font-size: 0.82rem; }
-    .mensaje-exito { background: #e8f8f0; color: #10b981; padding: 10px 14px; border-radius: 8px; font-size: 0.82rem; }
+    .input-wrapper { position: relative; }
+
+    .input {
+        width: 100%; padding: 10px 14px; border: 1.5px solid #e9ecef;
+        border-radius: 8px; font-size: 0.875rem; outline: none;
+        color: #1e1e2d; transition: border 0.2s, box-shadow 0.2s;
+    }
+    .input:focus {
+        border-color: #e94560;
+        box-shadow: 0 0 0 3px rgba(233,69,96,0.08);
+    }
+
+    .toggle-pass {
+        position: absolute; right: 12px; top: 50%;
+        transform: translateY(-50%); background: none; border: none;
+        color: #9ca3af; cursor: pointer; font-size: 0.8rem;
+        font-weight: 500; padding: 4px 8px; border-radius: 4px;
+        transition: color 0.2s;
+    }
+    .toggle-pass:hover { color: #e94560; }
+
+    .requisitos {
+        background: #f9fafb; border: 1px solid #f0f0f0;
+        border-radius: 8px; padding: 12px 14px;
+        margin-top: -8px; margin-bottom: 16px;
+    }
+    .requisito {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 0.78rem; color: #9ca3af; margin-bottom: 5px;
+        transition: color 0.2s;
+    }
+    .requisito:last-child { margin-bottom: 0; }
+    .requisito.ok { color: #10b981; }
+    .req-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #d1d5db; flex-shrink: 0; transition: background 0.2s;
+    }
+    .requisito.ok .req-dot { background: #10b981; }
+
+    .mensaje-error {
+        background: #fde8ec; color: #e94560;
+        padding: 10px 14px; border-radius: 8px; font-size: 0.82rem;
+        margin-top: 8px;
+    }
+    .mensaje-exito {
+        background: #e8f8f0; color: #10b981;
+        padding: 10px 14px; border-radius: 8px; font-size: 0.82rem;
+        margin-top: 8px; text-align: center;
+    }
 </style>
 
 <script>
+    (window as any).togglePass = togglePass;
+    (window as any).verificarRequisitos = verificarRequisitos;
     (window as any).abrirModal = abrirModal;
     (window as any).cerrarModal = cerrarModal;
     (window as any).cerrarModalOverlay = cerrarModalOverlay;
     (window as any).guardarAdmin = guardarAdmin;
     (window as any).eliminarAdmin = eliminarAdmin;
 
+    function togglePass(inputId: string, btnId: string) {
+        const input = document.getElementById(inputId) as HTMLInputElement;
+        const btn = document.getElementById(btnId)!;
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = 'Ocultar';
+        } else {
+            input.type = 'password';
+            btn.textContent = 'Mostrar';
+        }
+    }
+
+    function verificarRequisitos() {
+        const pass = (document.getElementById('contrasena') as HTMLInputElement).value;
+        const reqLong = document.getElementById('req-longitud')!;
+        const reqMay = document.getElementById('req-mayuscula')!;
+        const reqNum = document.getElementById('req-numero')!;
+
+        pass.length >= 6 ? reqLong.classList.add('ok') : reqLong.classList.remove('ok');
+        /[A-Z]/.test(pass) ? reqMay.classList.add('ok') : reqMay.classList.remove('ok');
+        /[0-9]/.test(pass) ? reqNum.classList.add('ok') : reqNum.classList.remove('ok');
+    }
+
     async function cargarAdmins() {
         try {
             const res = await fetch('/php/admins.php?action=listar');
             const data = await res.json();
             const tbody = document.getElementById('tabla-admins')!;
+            const contador = document.getElementById('contador-admins')!;
+            contador.textContent = `${data.length} admin${data.length !== 1 ? 's' : ''}`;
+
             if (data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="empty">No hay administradores registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="empty">No hay administradores registrados</td></tr>';
                 return;
             }
             tbody.innerHTML = data.map((a: any, i: number) => `
                 <tr>
-                    <td>${i + 1}</td>
+                    <td style="color:#9ca3af">${i + 1}</td>
                     <td>
-                        <span class="avatar-sm">${a.nombre.charAt(0).toUpperCase()}</span>
-                        <strong>${a.nombre}</strong>
+                        <div class="admin-info">
+                            <div class="avatar-sm">${a.nombre.charAt(0).toUpperCase()}</div>
+                            <div>
+                                <div class="admin-nombre">${a.nombre}</div>
+                                <div class="admin-id">ID #${a.id}</div>
+                            </div>
+                        </div>
                     </td>
                     <td>${a.correo}</td>
-                    <td>${new Date(a.created_at).toLocaleDateString('es-MX')}</td>
+                    <td>${new Date(a.created_at).toLocaleDateString('es-MX', {year:'numeric',month:'short',day:'numeric'})}</td>
+                    <td><span class="badge-admin">Super Admin</span></td>
                     <td>
-                        <span class="badge-admin">Super Admin</span>
-                        <button class="btn-delete" style="margin-left:8px" onclick="eliminarAdmin(${a.id})">Eliminar</button>
+                        <button class="btn-delete" onclick="eliminarAdmin(${a.id})">Eliminar</button>
                     </td>
                 </tr>
             `).join('');
         } catch(e) {
             document.getElementById('tabla-admins')!.innerHTML =
-                '<tr><td colspan="5" class="empty">Sin conexión al servidor</td></tr>';
+                '<tr><td colspan="6" class="empty">Sin conexión al servidor</td></tr>';
         }
     }
 
     function abrirModal() {
-        document.getElementById('nombre')!.value = '';
-        document.getElementById('correo')!.value = '';
-        document.getElementById('contrasena')!.value = '';
-        document.getElementById('confirmar')!.value = '';
+        (document.getElementById('nombre') as HTMLInputElement).value = '';
+        (document.getElementById('correo') as HTMLInputElement).value = '';
+        (document.getElementById('contrasena') as HTMLInputElement).value = '';
+        (document.getElementById('confirmar') as HTMLInputElement).value = '';
         document.getElementById('mensaje-error')!.style.display = 'none';
         document.getElementById('mensaje-exito')!.style.display = 'none';
+        ['req-longitud','req-mayuscula','req-numero'].forEach(id => {
+            document.getElementById(id)!.classList.remove('ok');
+        });
         document.getElementById('modal')!.classList.add('show');
     }
 
@@ -241,7 +403,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     }
 
     async function eliminarAdmin(id: number) {
-        if (!confirm('¿Eliminar este administrador?')) return;
+        if (!confirm('¿Estás segura de eliminar este administrador?')) return;
         try {
             const res = await fetch('/php/admins.php', {
                 method: 'POST',

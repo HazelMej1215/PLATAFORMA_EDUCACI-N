@@ -24,7 +24,6 @@ const { title } = Astro.props;
             background-color: #f5f6fa;
         }
 
-        /* SIDEBAR */
         .sidebar {
             width: 250px;
             background: #1e1e2d;
@@ -136,7 +135,6 @@ const { title } = Astro.props;
             color: #e94560;
         }
 
-        /* MAIN CONTENT */
         .main-content {
             margin-left: 250px;
             flex: 1;
@@ -145,7 +143,6 @@ const { title } = Astro.props;
             min-height: 100vh;
         }
 
-        /* NAVBAR */
         .navbar {
             background: white;
             padding: 0 30px;
@@ -231,7 +228,6 @@ const { title } = Astro.props;
             color: #aaa;
         }
 
-        /* PAGE CONTENT */
         .page-content {
             padding: 28px 30px;
             flex: 1;
@@ -240,7 +236,6 @@ const { title } = Astro.props;
 </head>
 <body>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-logo">
             <h2>Edu<span>Platform</span></h2>
@@ -302,14 +297,13 @@ const { title } = Astro.props;
         </div>
 
         <div class="sidebar-footer">
-            <a href="/login">
+            <a href="#" onclick="cerrarSesion()">
                 <i class="fas fa-sign-out-alt"></i>
                 Cerrar Sesión
             </a>
         </div>
     </aside>
 
-    <!-- MAIN -->
     <div class="main-content">
         <nav class="navbar">
             <div class="navbar-left">
@@ -324,9 +318,9 @@ const { title } = Astro.props;
                     <i class="fas fa-cog"></i>
                 </button>
                 <div class="navbar-user">
-                    <div class="avatar">A</div>
+                    <div class="avatar" id="admin-avatar">A</div>
                     <div class="user-info">
-                        <div class="user-name">Administrador</div>
+                        <div class="user-name" id="admin-nombre">Administrador</div>
                         <div class="user-role">Super Admin</div>
                     </div>
                 </div>
@@ -337,6 +331,27 @@ const { title } = Astro.props;
             <slot />
         </div>
     </div>
+
+<script>
+    // Verificar sesión
+    const adminData = sessionStorage.getItem('admin');
+    if (!adminData) {
+        window.location.href = '/login';
+    } else {
+        const admin = JSON.parse(adminData);
+        const nombreEl = document.getElementById('admin-nombre');
+        const avatarEl = document.getElementById('admin-avatar');
+        if (nombreEl) nombreEl.textContent = admin.nombre;
+        if (avatarEl) avatarEl.textContent = admin.nombre.charAt(0).toUpperCase();
+    }
+
+    function cerrarSesion() {
+        sessionStorage.removeItem('admin');
+        document.cookie = 'admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        window.location.href = '/login';
+    }
+    (window as any).cerrarSesion = cerrarSesion;
+</script>
 
 </body>
 </html>

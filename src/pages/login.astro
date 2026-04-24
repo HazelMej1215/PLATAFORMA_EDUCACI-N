@@ -306,8 +306,9 @@
 
             <div class="form-group">
                 <label>Contraseña</label>
-                <div class="input-wrapper">
-                    <input type="password" id="contrasena" class="input" placeholder="••••••••">
+                <div class="input-wrapper" style="position:relative">
+                    <input type="password" id="contrasena" class="input" placeholder="••••••••" style="padding-right:80px">
+                    <button type="button" onclick="toggleLoginPassword()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:#9ca3af;cursor:pointer;font-size:0.82rem;font-weight:500" id="toggle-btn">Mostrar</button>
                 </div>
             </div>
 
@@ -328,6 +329,19 @@
 </html>
 
 <script>
+    (window as any).toggleLoginPassword = toggleLoginPassword;
+    
+    function toggleLoginPassword() {
+    const input = document.getElementById('contrasena') as HTMLInputElement;
+    const btn = document.getElementById('toggle-btn')!;
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Ocultar';
+    } else {
+        input.type = 'password';
+        btn.textContent = 'Mostrar';
+    }
+}
     (window as any).iniciarSesion = iniciarSesion;
 
     // Enter para hacer login
@@ -335,37 +349,44 @@
         if (e.key === 'Enter') iniciarSesion();
     });
 
-    async function iniciarSesion() {
-        const correo = (document.getElementById('correo') as HTMLInputElement).value.trim();
-        const contrasena = (document.getElementById('contrasena') as HTMLInputElement).value;
-        const errorDiv = document.getElementById('mensaje-error')!;
+   async function iniciarSesion() {
+    const correo = (document.getElementById('correo') as HTMLInputElement).value.trim();
+    const contrasena = (document.getElementById('contrasena') as HTMLInputElement).value;
+    const errorDiv = document.getElementById('mensaje-error')!;
 
-        errorDiv.style.display = 'none';
+    errorDiv.style.display = 'none';
 
-        if (!correo || !contrasena) {
-            errorDiv.textContent = 'Por favor completa todos los campos';
-            errorDiv.style.display = 'block';
-            return;
-        }
+    if (!correo || !contrasena) {
+        errorDiv.textContent = 'Por favor completa todos los campos';
+        errorDiv.style.display = 'block';
+        return;
+    }
 
-        try {
-            const res = await fetch('/php/login.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ correo, contrasena })
-            });
-            const data = await res.json();
+    try {
+        const res = await fetch('/php/login.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo, contrasena })
+        });
+        const data = await res.json();
 
-            if (data.success) {
+        if (data.success) {
+            if (data.rol === 'admin') {
+                // Es administrador
                 sessionStorage.setItem('admin', JSON.stringify(data.admin));
                 window.location.href = '/admin';
-            } else {
-                errorDiv.textContent = data.mensaje || 'Credenciales incorrectas';
-                errorDiv.style.display = 'block';
+            } else if (data.rol === 'cliente') {
+                // Es cliente — Gamboa manejará esta ruta
+                sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
+                window.location.href = '/cliente';
             }
-        } catch(e) {
-            errorDiv.textContent = 'Error de conexión con el servidor';
+        } else {
+            errorDiv.textContent = data.mensaje || 'Credenciales incorrectas';
             errorDiv.style.display = 'block';
         }
+    } catch(e) {
+        errorDiv.textContent = 'Error de conexión con el servidor';
+        errorDiv.style.display = 'block';
     }
+}
 </script>
