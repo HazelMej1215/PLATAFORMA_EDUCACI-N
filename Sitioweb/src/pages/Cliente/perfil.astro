@@ -13,14 +13,75 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+body.dark-theme {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+body.dark-theme .navbar,
+body.dark-theme .sidebar {
+    background: #020617;
+}
+body.dark-theme .card,
+body.dark-theme .profile-card,
+body.dark-theme .video-card,
+body.dark-theme .lecciones,
+body.dark-theme .modal-box {
+    background: #1e293b;
+    color: #e2e8f0;
+}
+body.dark-theme .course-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+body.dark-theme .welcome-card {
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+}
+body.dark-theme .leccion.disponible {
+    background: #334155;
+    color: #a5b4fc;
+}
+body.dark-theme .leccion.vista {
+    background: #065f46;
+    color: #d1fae5;
+}
+body.dark-theme .leccion.bloqueada {
+    background: #334155;
+    color: #94a3b8;
+}
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+body.dark-theme .btn {
+    background: #4f46e5;
+}
+body.dark-theme .logout-btn {
+    background: #b91c1c;
+}
+body.dark-theme .progress,
+body.dark-theme .estado {
+    color: #94a3b8;
+}
+body.dark-theme .stat {
+    background: #1e293b;
+    border-color: #334155;
+}
+body.dark-theme table th {
+    background: #1e293b;
+}
+body.dark-theme table td {
+    border-bottom-color: #334155;
+}
         body {
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f1f5f9;
             color: #0f172a;
+            transition: background 0.3s, color 0.3s;
         }
 
-        /* Navbar (mismo estilo que dashboard) */
         .navbar {
             background: #0f172a;
             color: #e2e8f0;
@@ -89,7 +150,6 @@
             background: #b91c1c;
         }
 
-        /* Contenido principal */
         .container {
             max-width: 900px;
             margin: 2rem auto;
@@ -101,6 +161,7 @@
             border-radius: 1.5rem;
             padding: 2rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s;
         }
 
         .profile-header {
@@ -137,6 +198,7 @@
 
         .avatar-input {
             font-size: 0.85rem;
+            text-align: center;
         }
 
         .form-group {
@@ -168,6 +230,11 @@
             background: white;
         }
 
+        input:disabled {
+            background: #e2e8f0;
+            cursor: not-allowed;
+        }
+
         .btn-primary {
             background: #4f46e5;
             color: white;
@@ -181,8 +248,13 @@
             font-size: 1rem;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background: #4338ca;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .msg {
@@ -249,7 +321,7 @@
 
             <form id="perfilForm">
                 <div class="avatar-section">
-                    <img id="avatarImg" class="avatar" src="/default-avatar.png" alt="Avatar">
+                    <img id="avatarImg" class="avatar" alt="Avatar">
                     <div class="avatar-input">
                         <label for="imagenInput">Cambiar foto de perfil:</label>
                         <input type="file" id="imagenInput" accept="image/jpeg,image/png,image/jpg">
@@ -285,59 +357,114 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn-primary">Guardar cambios</button>
+                <button type="submit" class="btn-primary" id="btnGuardar">Guardar cambios</button>
                 <div id="mensaje" class="msg"></div>
             </form>
+            <div id="errorGlobal" class="msg error" style="display: none; margin-top: 1rem;"></div>
         </div>
     </div>
 
     <script>
-        let usuarioId = null;
         let imagenBase64 = null;
+        let avatarActualizado = false;
 
-        async function cargarPerfil() {
-            try {
-                const resp = await fetch('http://localhost/plataforma/api.php?action=obtener_perfil', {
-                    credentials: 'include'
-                });
-                const data = await resp.json();
-                if (!data.success) {
-                    window.location.href = '/';
-                    return;
-                }
-                const perfil = data.perfil;
-                document.getElementById('nombre').value = perfil.nombre || '';
-                document.getElementById('correo').value = perfil.correo || '';
-                document.getElementById('tema').value = perfil.tema || 'claro';
-                document.getElementById('nombreUsuario').innerText = perfil.nombre || 'Cliente';
-                if (perfil.imagen_perfil && perfil.imagen_perfil !== 'default.png') {
-                    document.getElementById('avatarImg').src = 'http://localhost/plataforma/uploads/' + perfil.imagen_perfil;
-                } else {
-                    document.getElementById('avatarImg').src = 'https://ui-avatars.com/api/?background=4f46e5&color=fff&name=' + encodeURIComponent(perfil.nombre || 'Usuario');
-                }
-                // Aplicar tema
-                aplicarTema(perfil.tema);
-            } catch (error) {
-                console.error('Error al cargar perfil:', error);
-                window.location.href = '/';
-            }
+       async function cargarPerfil() {
+    try {
+        const resp = await fetch('http://localhost/plataforma/api.php?action=obtener_perfil', {
+            credentials: 'include'
+        });
+        const data = await resp.json();
+        if (!data.success) {
+            const errorDiv = document.getElementById('errorGlobal');
+            errorDiv.textContent = data.message || 'No se pudo cargar el perfil.';
+            errorDiv.style.display = 'block';
+            document.querySelectorAll('#perfilForm input, #perfilForm select, #btnGuardar').forEach(el => el.disabled = true);
+            return;
         }
+        const perfil = data.perfil;
+        document.getElementById('nombre').value = perfil.nombre || '';
+        document.getElementById('correo').value = perfil.correo || '';
+        document.getElementById('tema').value = perfil.tema || 'claro';
+        document.getElementById('nombreUsuario').innerText = perfil.nombre || 'Cliente';
+        
+        // Mostrar avatar: si hay imagen_perfil y no es null o 'default.png'
+        if (perfil.imagen_perfil && perfil.imagen_perfil !== 'default.png' && perfil.imagen_perfil !== '') {
+            const imgUrl = 'http://localhost/plataforma/uploads/' + perfil.imagen_perfil;
+            document.getElementById('avatarImg').src = imgUrl;
+            console.log('Cargando avatar desde:', imgUrl);
+        } else {
+            // usar UI Avatars
+            document.getElementById('avatarImg').src = 'https://ui-avatars.com/api/?background=4f46e5&color=fff&name=' + encodeURIComponent(perfil.nombre || 'Usuario');
+        }
+        
+        aplicarTema(perfil.tema);
+    } catch (error) {
+        console.error('Error al cargar perfil:', error);
+        document.getElementById('errorGlobal').textContent = 'Error de conexión.';
+        document.getElementById('errorGlobal').style.display = 'block';
+    }
+}
+
+// Guardar cambios - actualización para imagen
+document.getElementById('perfilForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nuevaPassword = document.getElementById('nuevaPassword').value;
+    const confirmar = document.getElementById('confirmarPassword').value;
+    if (nuevaPassword !== confirmar) {
+        mostrarMensaje('Las contraseñas no coinciden', 'error');
+        return;
+    }
+    const tema = document.getElementById('tema').value;
+    const formData = new FormData();
+    formData.append('action', 'actualizar_perfil');
+    if (nuevaPassword) formData.append('nueva_contraseña', nuevaPassword);
+    if (tema) formData.append('tema', tema);
+    if (imagenBase64) formData.append('imagen', imagenBase64);
+    
+    const btn = document.getElementById('btnGuardar');
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
+    try {
+        const resp = await fetch('http://localhost/plataforma/api.php', {
+            method: 'POST',
+            body: formData,
+            credentials: 'include'
+        });
+        const data = await resp.json();
+        if (data.success) {
+            mostrarMensaje('Perfil actualizado correctamente', 'success');
+            // Si cambió el tema, aplicarlo inmediatamente
+            aplicarTema(tema);
+            // Recargar la página para ver los cambios (incluyendo la nueva imagen)
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            mostrarMensaje(data.message || 'Error al actualizar', 'error');
+            btn.disabled = false;
+            btn.textContent = 'Guardar cambios';
+        }
+    } catch (error) {
+        mostrarMensaje('Error de conexión', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Guardar cambios';
+    }
+});
 
         function aplicarTema(tema) {
             if (tema === 'oscuro') {
                 document.body.style.background = '#0f172a';
                 document.body.style.color = '#e2e8f0';
-                const cards = document.querySelectorAll('.profile-card');
-                cards.forEach(card => card.style.background = '#1e293b');
+                const card = document.querySelector('.profile-card');
+                if (card) card.style.background = '#1e293b';
             } else {
                 document.body.style.background = '#f1f5f9';
                 document.body.style.color = '#0f172a';
-                const cards = document.querySelectorAll('.profile-card');
-                cards.forEach(card => card.style.background = 'white');
+                const card = document.querySelector('.profile-card');
+                if (card) card.style.background = 'white';
             }
         }
 
-        document.getElementById('imagenInput').addEventListener('change', async (e) => {
+        // Previsualizar imagen seleccionada
+        document.getElementById('imagenInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
             if (!file.type.startsWith('image/')) {
@@ -352,10 +479,12 @@
             reader.onloadend = () => {
                 imagenBase64 = reader.result;
                 document.getElementById('avatarImg').src = imagenBase64;
+                avatarActualizado = true;
             };
             reader.readAsDataURL(file);
         });
 
+        // Guardar cambios
         document.getElementById('perfilForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const nuevaPassword = document.getElementById('nuevaPassword').value;
@@ -370,6 +499,10 @@
             if (nuevaPassword) formData.append('nueva_contraseña', nuevaPassword);
             if (tema) formData.append('tema', tema);
             if (imagenBase64) formData.append('imagen', imagenBase64);
+            
+            const btn = document.getElementById('btnGuardar');
+            btn.disabled = true;
+            btn.textContent = 'Guardando...';
             try {
                 const resp = await fetch('http://localhost/plataforma/api.php', {
                     method: 'POST',
@@ -383,9 +516,13 @@
                     setTimeout(() => location.reload(), 1500);
                 } else {
                     mostrarMensaje(data.message || 'Error al actualizar', 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Guardar cambios';
                 }
             } catch (error) {
                 mostrarMensaje('Error de conexión', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Guardar cambios';
             }
         });
 
@@ -399,7 +536,7 @@
             }, 3000);
         }
 
-        // Cierre de sesión con redirección
+        // Cierre de sesión
         document.getElementById('logoutBtn').addEventListener('click', async () => {
             try {
                 await fetch('http://localhost/plataforma/api.php?action=logout', { credentials: 'include' });

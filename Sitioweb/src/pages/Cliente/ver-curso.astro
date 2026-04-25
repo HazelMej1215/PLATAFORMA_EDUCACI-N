@@ -1,100 +1,490 @@
 ---
-// src/pages/Cliente/ver-curso.astro
-// Esta página requiere recibir ?curso_id=1 en la URL
 ---
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Reproduciendo curso</title>
-    <style>
-        body { font-family: 'Inter', sans-serif; background:#f1f5f9; margin:0; }
-        .navbar { background:#0f172a; color:white; padding:1rem; text-align:center; }
-        .container { display:flex; max-width:1200px; margin:2rem auto; gap:2rem; flex-wrap:wrap; background:white; border-radius:1.5rem; padding:1.5rem; }
-        .video-area { flex:2; }
-        .video-area iframe { width:100%; height:400px; border-radius:1rem; }
-        .lecciones { flex:1; background:#f8fafc; border-radius:1rem; padding:1rem; }
-        .leccion { padding:0.75rem; margin-bottom:0.5rem; border-radius:0.5rem; cursor:pointer; }
-        .leccion.bloqueada { background:#e2e8f0; color:#64748b; cursor:not-allowed; }
-        .leccion.disponible { background:#dbeafe; color:#1e3a8a; }
-        .leccion.vista { background:#d1fae5; color:#065f46; }
-        button { background:#4f46e5; border:none; color:white; padding:0.5rem 1rem; border-radius:0.5rem; cursor:pointer; margin-top:1rem; }
-        @media (max-width:768px) { .container { flex-direction:column; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ver Curso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f8fafc;color:#0f172a}
+
+.navbar{
+background:#020617;
+color:#fff;
+padding:16px 32px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:10px
+}
+
+.navbar h2{font-size:18px;font-weight:600}
+
+.navbar a{
+color:#94a3b8;
+text-decoration:none;
+margin-left:16px;
+font-size:14px;
+transition:.2s
+}
+
+.navbar a:hover{color:#fff}
+
+.wrapper{
+max-width:1400px;
+margin:32px auto;
+padding:0 20px
+}
+
+.layout{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:24px
+}
+
+.video-card{
+background:#fff;
+border-radius:14px;
+padding:16px;
+box-shadow:0 10px 25px rgba(0,0,0,.05)
+}
+
+.video-card iframe{
+width:100%;
+height:420px;
+border:none;
+border-radius:10px
+}
+
+.estado{
+margin-top:12px;
+font-size:14px;
+color:#475569
+}
+
+.lecciones{
+background:#fff;
+border-radius:14px;
+padding:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.05);
+max-height:600px;
+overflow-y:auto
+}
+
+.lecciones h3{
+font-size:16px;
+margin-bottom:12px
+}
+
+.leccion{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px;
+border-radius:10px;
+margin-bottom:8px;
+font-size:14px;
+transition:.2s;
+cursor:pointer
+}
+
+.leccion.disponible{
+background:#eef2ff;
+color:#3730a3
+}
+
+.leccion.vista{
+background:#ecfdf5;
+color:#065f46
+}
+
+.leccion.bloqueada{
+background:#e2e8f0;
+color:#64748b;
+cursor:not-allowed
+}
+
+.leccion.actual{
+border:1.5px solid #6366f1
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(2,6,23,.7);
+justify-content:center;
+align-items:center;
+z-index:1000
+}
+
+.modal-box{
+background:#fff;
+border-radius:14px;
+padding:28px;
+width:90%;
+max-width:480px;
+text-align:center
+}
+
+.modal-box h2{
+font-size:20px;
+margin-bottom:10px
+}
+
+.modal-box p{
+font-size:14px;
+color:#64748b
+}
+
+.rating{
+display:flex;
+justify-content:center;
+gap:10px;
+margin:20px 0;
+font-size:26px;
+cursor:pointer
+}
+
+.star{
+color:#cbd5e1;
+transition:.2s
+}
+
+.star.active{
+color:#f59e0b
+}
+
+textarea{
+width:100%;
+border-radius:8px;
+border:1px solid #e2e8f0;
+padding:10px;
+font-size:14px;
+margin-top:10px;
+resize:none
+}
+
+.btn{
+margin-top:16px;
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#6366f1;
+color:#fff;
+font-size:14px;
+font-weight:500;
+cursor:pointer;
+transition:.2s
+}
+
+.btn:hover{
+background:#4f46e5
+}
+
+.msg{
+margin-top:10px;
+font-size:13px;
+color:#dc2626
+}
+
+@media(max-width:900px){
+.layout{
+grid-template-columns:1fr
+}
+.video-card iframe{
+height:300px
+}
+}
+
+body.dark-theme {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+body.dark-theme .navbar,
+body.dark-theme .sidebar {
+    background: #020617;
+}
+body.dark-theme .card,
+body.dark-theme .profile-card,
+body.dark-theme .video-card,
+body.dark-theme .lecciones,
+body.dark-theme .modal-box {
+    background: #1e293b;
+    color: #e2e8f0;
+}
+body.dark-theme .course-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+body.dark-theme .welcome-card {
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+}
+body.dark-theme .leccion.disponible {
+    background: #334155;
+    color: #a5b4fc;
+}
+body.dark-theme .leccion.vista {
+    background: #065f46;
+    color: #d1fae5;
+}
+body.dark-theme .leccion.bloqueada {
+    background: #334155;
+    color: #94a3b8;
+}
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+body.dark-theme .btn {
+    background: #4f46e5;
+}
+body.dark-theme .logout-btn {
+    background: #b91c1c;
+}
+body.dark-theme .progress,
+body.dark-theme .estado {
+    color: #94a3b8;
+}
+body.dark-theme .stat {
+    background: #1e293b;
+    border-color: #334155;
+}
+body.dark-theme table th {
+    background: #1e293b;
+}
+body.dark-theme table td {
+    border-bottom-color: #334155;
+}
+</style>
 </head>
 <body>
-    <div class="navbar">
-        <h2>Reproduciendo curso</h2>
-        <a href="/Cliente/cursos" style="color:white;">← Volver a cursos</a>
-    </div>
-    <div class="container" id="app">
-        <div class="video-area">
-            <iframe id="player" src="" frameborder="0" allowfullscreen></iframe>
-            <div id="completadoMsg"></div>
-        </div>
-        <div class="lecciones" id="listaLecciones">Cargando lecciones...</div>
-    </div>
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const cursoId = urlParams.get('curso_id');
-        if (!cursoId) window.location.href = '/Cliente/cursos';
 
-        let progreso = []; // array de {id, orden, visto}
-        let videos = [];    // array de {id, titulo, url, orden}
+<div class="navbar">
+<h2>Plataforma Educativa</h2>
+<div>
+<a href="/Cliente/dashboard">Inicio</a>
+<a href="/Cliente/cursos">Mis Cursos</a>
+<a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+</div>
+</div>
 
-        async function cargarProgreso() {
-            const resp = await fetch(`http://localhost/plataforma/api.php?action=obtener_progreso&curso_id=${cursoId}`, { credentials: 'include' });
-            const data = await resp.json();
-            if (!data.success) return;
-            progreso = data.progreso;
-            // También necesitamos obtener los datos de los videos (títulos, URLs)
-            const respVideos = await fetch(`http://localhost/plataforma/api.php?action=videos_curso&curso_id=${cursoId}`, { credentials: 'include' });
-            const dataVideos = await respVideos.json();
-            if (dataVideos.success) videos = dataVideos.videos;
-            renderLecciones();
-            // Determinar primer video no visto
-            let primerNoVisto = videos.find(v => {
-                let prog = progreso.find(p => p.id === v.id);
-                return !prog || prog.visto === 0;
-            });
-            if (!primerNoVisto) primerNoVisto = videos[0];
-            if (primerNoVisto) cargarVideo(primerNoVisto.id);
-        }
+<div class="wrapper">
+<div class="layout">
 
-        function renderLecciones() {
-            let html = '<h3>Lecciones</h3>';
-            for (let v of videos) {
-                let prog = progreso.find(p => p.id === v.id);
-                let estado = (prog && prog.visto === 1) ? 'vista' : (v.orden === 1 || (progreso.find(p => p.orden === v.orden-1 && p.visto === 1)) ? 'disponible' : 'bloqueada');
-                let clase = `leccion ${estado}`;
-                let click = (estado !== 'bloqueada') ? `onclick="cargarVideo(${v.id})"` : '';
-                html += `<div class="${clase}" ${click}>${v.orden}. ${v.titulo}</div>`;
-            }
-            document.getElementById('listaLecciones').innerHTML = html;
-        }
+<div class="video-card">
+<iframe id="videoFrame"></iframe>
+<div id="cursoCompletadoMsg" class="estado"></div>
+</div>
 
-        async function cargarVideo(videoId) {
-            const video = videos.find(v => v.id === videoId);
-            if (!video) return;
-            document.getElementById('player').src = video.url;
-            // Marcar como visto si es el primero que se reproduce? Realmente se marca al terminar.
-            // Para simplificar, agregamos un listener para marcar al final del video (no implementado aquí).
-            // Simulación: botón "Marcar como visto" (requiere backend). Lo dejamos simple.
-        }
+<div class="lecciones">
+<h3>Contenido del curso</h3>
+<div id="leccionesLista">Cargando...</div>
+</div>
 
-        async function marcarVisto(videoId) {
+</div>
+</div>
 
-            const resp = await fetch('http://localhost/plataforma/api.php?action=marcar_visto', {
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify({video_id: videoId}),
-                credentials: 'include'
-            });
-            const data = await resp.json();
-            if (data.success) cargarProgreso(); // refrescar
-        }
+<div id="calificacionModal" class="modal">
+<div class="modal-box">
+<h2>Curso completado</h2>
+<p>Califica el contenido y deja un comentario</p>
 
-        cargarProgreso();
-    </script>
+<div class="rating" id="ratingStars">
+<span class="star" data-value="1">★</span>
+<span class="star" data-value="2">★</span>
+<span class="star" data-value="3">★</span>
+<span class="star" data-value="4">★</span>
+<span class="star" data-value="5">★</span>
+</div>
+
+<textarea id="comentario" rows="3" placeholder="Comentario"></textarea>
+
+<button id="btnEnviarCalificacion" class="btn">Enviar</button>
+
+<div id="modalMsg" class="msg"></div>
+</div>
+</div>
+
+<script>
+(function(){
+    const saved = localStorage.getItem('theme');
+    if (saved === 'oscuro') document.body.classList.add('dark-theme');
+    else if (saved === 'claro') document.body.classList.add('light-theme');
+    else {
+        fetch('http://localhost/plataforma/api.php?action=obtener_tema', { credentials: 'include' })
+            .then(r => r.json())
+            .then(data => {
+                const theme = data.theme || 'claro';
+                document.body.classList.add(theme === 'oscuro' ? 'dark-theme' : 'light-theme');
+                localStorage.setItem('theme', theme);
+            })
+            .catch(() => document.body.classList.add('light-theme'));
+    }
+})();
+</script>
+<script>
+const urlParams=new URLSearchParams(window.location.search)
+const cursoId=urlParams.get('curso_id')
+if(!cursoId)window.location.href='/Cliente/cursos'
+
+let videos=[]
+let progreso=[]
+let cursoCompletado=false
+let puntuacionSeleccionada=0
+
+async function cargarDatos(){
+try{
+const respVideos=await fetch(`http://localhost/plataforma/api.php?action=videos_curso&curso_id=${cursoId}`,{credentials:'include'})
+const dataVideos=await respVideos.json()
+if(!dataVideos.success)throw new Error()
+videos=dataVideos.videos
+
+const respProgreso=await fetch(`http://localhost/plataforma/api.php?action=obtener_progreso&curso_id=${cursoId}`,{credentials:'include'})
+const dataProgreso=await respProgreso.json()
+if(dataProgreso.success)progreso=dataProgreso.progreso
+
+const total=videos.length
+const vistos=progreso.filter(p=>p.visto===1).length
+cursoCompletado=(total>0&&vistos===total)
+
+if(cursoCompletado){
+document.getElementById('cursoCompletadoMsg').innerText='Curso finalizado'
+}
+
+renderLecciones()
+
+let siguiente=videos.find(v=>{
+let p=progreso.find(x=>x.id===v.id)
+return !p||p.visto===0
+})
+
+if(!siguiente&&videos.length>0)siguiente=videos[videos.length-1]
+if(siguiente)cargarVideo(siguiente.id)
+
+}catch{
+document.getElementById('leccionesLista').innerHTML='Error al cargar'
+}
+}
+
+function renderLecciones(){
+let html=''
+for(let i=0;i<videos.length;i++){
+const v=videos[i]
+const prog=progreso.find(p=>p.id===v.id)
+const visto=prog&&prog.visto===1
+
+let clase='leccion '
+let estado=''
+
+const anterior=(i===0)||(progreso.find(p=>p.id===videos[i-1]?.id)?.visto===1)
+
+if(visto){clase+='vista';estado='Completado'}
+else if(anterior){clase+='disponible';estado='Disponible'}
+else{clase+='bloqueada';estado='Bloqueado'}
+
+const actual=document.getElementById('videoFrame').src.includes(encodeURIComponent(v.url))
+if(actual)clase+=' actual'
+
+html+=`<div class="${clase}" data-id="${v.id}">
+<span>${v.orden}. ${v.titulo}</span>
+<span>${estado}</span>
+</div>`
+}
+
+document.getElementById('leccionesLista').innerHTML=html
+
+document.querySelectorAll('.leccion.disponible,.leccion.vista').forEach(el=>{
+el.onclick=()=>cargarVideo(parseInt(el.dataset.id))
+})
+}
+
+async function cargarVideo(id){
+const video=videos.find(v=>v.id===id)
+if(!video)return
+document.getElementById('videoFrame').src=video.url
+
+const prog=progreso.find(p=>p.id===id)
+if(!prog||prog.visto===0)await marcarVisto(id)
+
+renderLecciones()
+}
+
+async function marcarVisto(id){
+const resp=await fetch('http://localhost/plataforma/api.php?action=marcar_visto',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({video_id:id}),
+credentials:'include'
+})
+const data=await resp.json()
+if(data.success){
+const r=await fetch(`http://localhost/plataforma/api.php?action=obtener_progreso&curso_id=${cursoId}`,{credentials:'include'})
+const d=await r.json()
+if(d.success)progreso=d.progreso
+
+const total=videos.length
+const vistos=progreso.filter(p=>p.visto===1).length
+
+if(total>0&&vistos===total&&!cursoCompletado){
+cursoCompletado=true
+document.getElementById('cursoCompletadoMsg').innerText='Curso finalizado. Completa la evaluación'
+document.getElementById('calificacionModal').style.display='flex'
+}
+}
+}
+
+document.querySelectorAll('.star').forEach(star=>{
+star.onclick=()=>{
+puntuacionSeleccionada=parseInt(star.dataset.value)
+document.querySelectorAll('.star').forEach((s,i)=>{
+s.classList.toggle('active',i<puntuacionSeleccionada)
+})
+}
+})
+
+document.getElementById('btnEnviarCalificacion').onclick=async()=>{
+const comentario=document.getElementById('comentario').value.trim()
+
+if(puntuacionSeleccionada===0){
+document.getElementById('modalMsg').innerText='Selecciona una calificación'
+return
+}
+
+if(!comentario){
+document.getElementById('modalMsg').innerText='Comentario requerido'
+return
+}
+
+const fd=new FormData()
+fd.append('action','calificar_curso')
+fd.append('curso_id',cursoId)
+fd.append('puntuacion',puntuacionSeleccionada)
+fd.append('comentario',comentario)
+
+const resp=await fetch('http://localhost/plataforma/api.php',{method:'POST',body:fd,credentials:'include'})
+const data=await resp.json()
+
+if(data.success){
+document.getElementById('calificacionModal').style.display='none'
+}else{
+document.getElementById('modalMsg').innerText='Error al enviar'
+}
+}
+
+cargarDatos()
+</script>
+
 </body>
 </html>

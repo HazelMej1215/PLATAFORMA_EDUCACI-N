@@ -192,6 +192,17 @@
         </div>
     </div>
     <script>
+        async function verificarSesionAdmin() {
+    const resp = await fetch('http://localhost/plataforma/api.php?action=verificar_sesion', { credentials: 'include' });
+    const data = await resp.json();
+    if (!data.logged || data.rol !== 'admin') {
+        window.location.href = '/';
+        return false;
+    }
+    return true;
+}
+
+
         async function cargarProfesores() {
 const resp = await fetch('http://localhost/plataforma/api.php?action=listar_profesores', { credentials: 'include' });
             const data = await resp.json();
