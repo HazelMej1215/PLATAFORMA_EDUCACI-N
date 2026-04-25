@@ -1,159 +1,194 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro | Plataforma Educativa</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crear cuenta</title>
 
-        body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-        .register-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 1.5rem;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2);
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
 
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
-        }
+body{
+font-family:'Inter',sans-serif;
+background:#f3f4f6;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#111827
+}
 
-        .subtitle {
-            color: #6b7280;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
+.container{
+width:100%;
+max-width:420px;
+background:#ffffff;
+padding:36px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,.08)
+}
 
-        input {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 1rem;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-            background: #f9fafb;
-            font-family: inherit;
-        }
+.logo{
+font-size:18px;
+font-weight:600;
+text-align:center;
+margin-bottom:6px
+}
 
-        input:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-            background: white;
-        }
+.subtitle{
+font-size:13px;
+text-align:center;
+color:#6b7280;
+margin-bottom:28px
+}
 
-        button {
-            width: 100%;
-            padding: 0.85rem;
-            background: #4f46e5;
-            color: white;
-            border: none;
-            border-radius: 1rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-family: inherit;
-        }
+.field{
+margin-bottom:16px
+}
 
-        button:hover {
-            background: #4338ca;
-        }
+.field label{
+font-size:12px;
+color:#374151;
+display:block;
+margin-bottom:6px
+}
 
-        .msg {
-            margin-top: 1rem;
-            padding: 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.85rem;
-            text-align: center;
-        }
+.field input{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #e5e7eb;
+background:#f9fafb;
+font-size:14px;
+transition:.2s
+}
 
-        .error {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
+.field input:focus{
+outline:none;
+border-color:#6366f1;
+background:#fff
+}
 
-        .success {
-            background: #d1fae5;
-            color: #065f46;
-        }
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#111827;
+color:#fff;
+font-size:14px;
+font-weight:500;
+cursor:pointer;
+transition:.2s
+}
 
-        .login-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.85rem;
-            color: #6b7280;
-        }
+button:hover{
+background:#000
+}
 
-        .login-link a {
-            color: #4f46e5;
-            text-decoration: none;
-            font-weight: 600;
-        }
+.msg{
+margin-top:12px;
+font-size:13px;
+text-align:center;
+display:none
+}
 
-        .login-link a:hover {
-            text-decoration: underline;
-        }
+.msg.error{
+color:#dc2626
+}
 
-        @media (max-width: 480px) {
-            .register-container {
-                padding: 1.5rem;
-            }
-        }
-    </style>
+.msg.success{
+color:#16a34a
+}
+
+.footer{
+margin-top:20px;
+font-size:13px;
+text-align:center;
+color:#6b7280
+}
+
+.footer a{
+color:#111827;
+text-decoration:none;
+font-weight:500
+}
+
+.footer a:hover{
+text-decoration:underline
+}
+</style>
 </head>
+
 <body>
-    <div class="register-container">
-        <h2>Crear cuenta</h2>
-        <div class="subtitle">Regístrate para acceder a todos los cursos</div>
-        <form id="registerForm" method="POST" action="http://localhost/plataforma/api.php?action=registro"></form>
-            <input type="text" name="nombre" placeholder="Nombre completo" required>
-            <input type="email" name="correo" placeholder="Correo electrónico" required>
-            <input type="password" name="contraseña" placeholder="Contraseña" required>
-            <button type="submit">Registrarse</button>
-            <div id="msg" class="msg"></div>
-        </form>
-        <div class="login-link">
-            ¿Ya tienes cuenta? <a href="/">Inicia sesión</a>
-        </div>
-    </div>
-    <script>
-        const form = document.getElementById('registerForm');
-        const msgDiv = document.getElementById('msg');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
-            const response = await fetch(form.action, { method: 'POST', body: formData });
-            const result = await response.json();
-            if (result.success) {
-                msgDiv.className = 'msg success';
-                msgDiv.innerText = 'Registro exitoso. Redirigiendo al inicio de sesión...';
-                setTimeout(() => window.location.href = '/', 2000);
-            } else {
-                msgDiv.className = 'msg error';
-                msgDiv.innerText = result.message;
-            }
-        });
-    </script>
+
+<div class="container">
+
+<div class="logo">Plataforma Educativa</div>
+<div class="subtitle">Crea tu cuenta para comenzar</div>
+
+<form id="registerForm" method="POST" action="/api.php?action=registro">
+
+<div class="field">
+<label>Nombre completo</label>
+<input type="text" name="nombre" required>
+</div>
+
+<div class="field">
+<label>Correo electrónico</label>
+<input type="email" name="correo" required>
+</div>
+
+<div class="field">
+<label>Contraseña</label>
+<input type="password" name="contraseña" required>
+</div>
+
+<button type="submit">Crear cuenta</button>
+
+<div id="msg" class="msg"></div>
+
+</form>
+
+<div class="footer">
+¿Ya tienes cuenta? <a href="/">Iniciar sesión</a>
+</div>
+
+</div>
+
+<script>
+const form=document.getElementById('registerForm')
+const msg=document.getElementById('msg')
+
+form.addEventListener('submit',async e=>{
+e.preventDefault()
+
+msg.style.display='none'
+
+const data=new FormData(form)
+
+try{
+const res=await fetch(form.action,{method:'POST',body:data,credentials:'include'})
+const json=await res.json()
+
+if(json.success){
+msg.className='msg success'
+msg.textContent='Registro completado'
+msg.style.display='block'
+setTimeout(()=>window.location.href='/',1500)
+}else{
+msg.className='msg error'
+msg.textContent=json.message||'Error al registrar'
+msg.style.display='block'
+}
+}catch{
+msg.className='msg error'
+msg.textContent='Error de conexión'
+msg.style.display='block'
+}
+})
+</script>
+
 </body>
 </html>

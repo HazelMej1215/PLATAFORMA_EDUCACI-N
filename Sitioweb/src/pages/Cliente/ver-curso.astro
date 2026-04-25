@@ -1,5 +1,3 @@
----
----
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ver Curso</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#f8fafc;color:#0f172a}
+body{font-family:'Inter',sans-serif;background:#f8fafc;color:#0f172a;transition:background 0.3s}
 
 .navbar{
 background:#020617;
@@ -21,17 +20,8 @@ align-items:center;
 flex-wrap:wrap;
 gap:10px
 }
-
 .navbar h2{font-size:18px;font-weight:600}
-
-.navbar a{
-color:#94a3b8;
-text-decoration:none;
-margin-left:16px;
-font-size:14px;
-transition:.2s
-}
-
+.navbar a{color:#94a3b8;text-decoration:none;margin-left:16px;font-size:14px;transition:.2s}
 .navbar a:hover{color:#fff}
 
 .wrapper{
@@ -39,6 +29,16 @@ max-width:1400px;
 margin:32px auto;
 padding:0 20px
 }
+
+.curso-info{
+background:#fff;
+border-radius:14px;
+padding:20px;
+margin-bottom:24px;
+box-shadow:0 10px 25px rgba(0,0,0,.05)
+}
+.curso-info h1{font-size:24px;font-weight:700;margin-bottom:8px}
+.curso-info .descripcion{color:#475569;font-size:14px;line-height:1.5;margin-top:8px}
 
 .layout{
 display:grid;
@@ -52,19 +52,13 @@ border-radius:14px;
 padding:16px;
 box-shadow:0 10px 25px rgba(0,0,0,.05)
 }
-
 .video-card iframe{
 width:100%;
 height:420px;
 border:none;
 border-radius:10px
 }
-
-.estado{
-margin-top:12px;
-font-size:14px;
-color:#475569
-}
+.estado{margin-top:12px;font-size:14px;color:#475569}
 
 .lecciones{
 background:#fff;
@@ -74,43 +68,33 @@ box-shadow:0 10px 25px rgba(0,0,0,.05);
 max-height:600px;
 overflow-y:auto
 }
-
-.lecciones h3{
-font-size:16px;
-margin-bottom:12px
-}
+.lecciones h3{font-size:16px;margin-bottom:12px}
 
 .leccion{
-display:flex;
-justify-content:space-between;
-align-items:center;
 padding:12px;
 border-radius:10px;
 margin-bottom:8px;
 font-size:14px;
 transition:.2s;
-cursor:pointer
+cursor:pointer;
+border:1px solid transparent
 }
-
-.leccion.disponible{
-background:#eef2ff;
-color:#3730a3
+.leccion .leccion-titulo{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-weight:500
 }
-
-.leccion.vista{
-background:#ecfdf5;
-color:#065f46
-}
-
-.leccion.bloqueada{
-background:#e2e8f0;
+.leccion .leccion-desc{
+font-size:12px;
 color:#64748b;
-cursor:not-allowed
+margin-top:6px;
+line-height:1.4
 }
-
-.leccion.actual{
-border:1.5px solid #6366f1
-}
+.leccion.disponible{background:#eef2ff;border-color:#c7d2fe}
+.leccion.vista{background:#ecfdf5;border-color:#a7f3d0}
+.leccion.bloqueada{background:#e2e8f0;color:#64748b;cursor:not-allowed}
+.leccion.actual{border:1.5px solid #6366f1}
 
 .modal{
 display:none;
@@ -124,7 +108,6 @@ justify-content:center;
 align-items:center;
 z-index:1000
 }
-
 .modal-box{
 background:#fff;
 border-radius:14px;
@@ -133,139 +116,34 @@ width:90%;
 max-width:480px;
 text-align:center
 }
+.modal-box h2{font-size:20px;margin-bottom:10px}
+.modal-box p{font-size:14px;color:#64748b}
+.rating{display:flex;justify-content:center;gap:10px;margin:20px 0;font-size:26px;cursor:pointer}
+.star{color:#cbd5e1;transition:.2s}
+.star.active{color:#f59e0b}
+textarea{width:100%;border-radius:8px;border:1px solid #e2e8f0;padding:10px;font-size:14px;margin-top:10px;resize:none}
+.btn{margin-top:16px;width:100%;padding:12px;border:none;border-radius:8px;background:#6366f1;color:#fff;font-size:14px;font-weight:500;cursor:pointer}
+.btn:hover{background:#4f46e5}
+.msg{margin-top:10px;font-size:13px;color:#dc2626}
 
-.modal-box h2{
-font-size:20px;
-margin-bottom:10px
+/* Modo oscuro */
+body.dark-theme{
+background:#0f172a;color:#e2e8f0
 }
-
-.modal-box p{
-font-size:14px;
-color:#64748b
+body.dark-theme .navbar{background:#020617}
+body.dark-theme .curso-info,body.dark-theme .video-card,body.dark-theme .lecciones,body.dark-theme .modal-box{
+background:#1e293b;color:#e2e8f0
 }
-
-.rating{
-display:flex;
-justify-content:center;
-gap:10px;
-margin:20px 0;
-font-size:26px;
-cursor:pointer
-}
-
-.star{
-color:#cbd5e1;
-transition:.2s
-}
-
-.star.active{
-color:#f59e0b
-}
-
-textarea{
-width:100%;
-border-radius:8px;
-border:1px solid #e2e8f0;
-padding:10px;
-font-size:14px;
-margin-top:10px;
-resize:none
-}
-
-.btn{
-margin-top:16px;
-width:100%;
-padding:12px;
-border:none;
-border-radius:8px;
-background:#6366f1;
-color:#fff;
-font-size:14px;
-font-weight:500;
-cursor:pointer;
-transition:.2s
-}
-
-.btn:hover{
-background:#4f46e5
-}
-
-.msg{
-margin-top:10px;
-font-size:13px;
-color:#dc2626
-}
+body.dark-theme .curso-info .descripcion{color:#cbd5e1}
+body.dark-theme .leccion.disponible{background:#334155;color:#a5b4fc}
+body.dark-theme .leccion.vista{background:#065f46;color:#d1fae5}
+body.dark-theme .leccion.bloqueada{background:#334155;color:#94a3b8}
+body.dark-theme .leccion .leccion-desc{color:#94a3b8}
+body.dark-theme textarea{background:#0f172a;color:#e2e8f0;border-color:#475569}
 
 @media(max-width:900px){
-.layout{
-grid-template-columns:1fr
-}
-.video-card iframe{
-height:300px
-}
-}
-
-body.dark-theme {
-    background: #0f172a;
-    color: #e2e8f0;
-}
-body.dark-theme .navbar,
-body.dark-theme .sidebar {
-    background: #020617;
-}
-body.dark-theme .card,
-body.dark-theme .profile-card,
-body.dark-theme .video-card,
-body.dark-theme .lecciones,
-body.dark-theme .modal-box {
-    background: #1e293b;
-    color: #e2e8f0;
-}
-body.dark-theme .course-card {
-    background: #1e293b;
-    border-color: #334155;
-}
-body.dark-theme .welcome-card {
-    background: linear-gradient(145deg, #1e293b, #0f172a);
-}
-body.dark-theme .leccion.disponible {
-    background: #334155;
-    color: #a5b4fc;
-}
-body.dark-theme .leccion.vista {
-    background: #065f46;
-    color: #d1fae5;
-}
-body.dark-theme .leccion.bloqueada {
-    background: #334155;
-    color: #94a3b8;
-}
-body.dark-theme input,
-body.dark-theme textarea,
-body.dark-theme select {
-    background: #0f172a;
-    color: #e2e8f0;
-    border-color: #475569;
-}
-body.dark-theme .btn {
-    background: #4f46e5;
-}
-body.dark-theme .logout-btn {
-    background: #b91c1c;
-}
-body.dark-theme .progress,
-body.dark-theme .estado {
-    color: #94a3b8;
-}
-body.dark-theme .stat {
-    background: #1e293b;
-    border-color: #334155;
-}
-body.dark-theme table th {
-    background: #1e293b;
-}
-body.dark-theme table td {
-    border-bottom-color: #334155;
+.layout{grid-template-columns:1fr}
+.video-card iframe{height:300px}
 }
 </style>
 </head>
@@ -276,215 +154,267 @@ body.dark-theme table td {
 <div>
 <a href="/Cliente/dashboard">Inicio</a>
 <a href="/Cliente/cursos">Mis Cursos</a>
-<a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+<a href="/api.php?action=logout">Cerrar sesión</a>
 </div>
 </div>
 
 <div class="wrapper">
-<div class="layout">
-
-<div class="video-card">
-<iframe id="videoFrame"></iframe>
-<div id="cursoCompletadoMsg" class="estado"></div>
-</div>
-
-<div class="lecciones">
-<h3>Contenido del curso</h3>
-<div id="leccionesLista">Cargando...</div>
-</div>
-
-</div>
+    <!-- Aquí se cargará dinámicamente la información del curso -->
+    <div id="cursoInfoContainer"></div>
+    
+    <div class="layout">
+        <div class="video-card">
+            <iframe id="videoFrame"></iframe>
+            <div id="cursoCompletadoMsg" class="estado"></div>
+        </div>
+        <div class="lecciones">
+            <h3>Contenido del curso</h3>
+            <div id="leccionesLista">Cargando...</div>
+        </div>
+    </div>
 </div>
 
 <div id="calificacionModal" class="modal">
 <div class="modal-box">
 <h2>Curso completado</h2>
 <p>Califica el contenido y deja un comentario</p>
-
 <div class="rating" id="ratingStars">
-<span class="star" data-value="1">★</span>
-<span class="star" data-value="2">★</span>
-<span class="star" data-value="3">★</span>
-<span class="star" data-value="4">★</span>
-<span class="star" data-value="5">★</span>
+    <span class="star" data-value="1">★</span>
+    <span class="star" data-value="2">★</span>
+    <span class="star" data-value="3">★</span>
+    <span class="star" data-value="4">★</span>
+    <span class="star" data-value="5">★</span>
 </div>
-
-<textarea id="comentario" rows="3" placeholder="Comentario"></textarea>
-
-<button id="btnEnviarCalificacion" class="btn">Enviar</button>
-
+<textarea id="comentario" rows="3" placeholder="Comentario (obligatorio)"></textarea>
+<button id="btnEnviarCalificacion" class="btn">Enviar calificación</button>
 <div id="modalMsg" class="msg"></div>
 </div>
 </div>
 
 <script>
+// Tema persistente
 (function(){
     const saved = localStorage.getItem('theme');
     if (saved === 'oscuro') document.body.classList.add('dark-theme');
-    else if (saved === 'claro') document.body.classList.add('light-theme');
+    else if (saved === 'claro') document.body.classList.remove('dark-theme');
     else {
-        fetch('http://localhost/plataforma/api.php?action=obtener_tema', { credentials: 'include' })
+        fetch('/api.php?action=obtener_tema', { credentials: 'include' })
             .then(r => r.json())
             .then(data => {
-                const theme = data.theme || 'claro';
-                document.body.classList.add(theme === 'oscuro' ? 'dark-theme' : 'light-theme');
-                localStorage.setItem('theme', theme);
-            })
-            .catch(() => document.body.classList.add('light-theme'));
+                if (data.theme === 'oscuro') document.body.classList.add('dark-theme');
+                localStorage.setItem('theme', data.theme || 'claro');
+            }).catch(()=>{});
     }
 })();
-</script>
-<script>
-const urlParams=new URLSearchParams(window.location.search)
-const cursoId=urlParams.get('curso_id')
-if(!cursoId)window.location.href='/Cliente/cursos'
 
-let videos=[]
-let progreso=[]
-let cursoCompletado=false
-let puntuacionSeleccionada=0
+const urlParams = new URLSearchParams(window.location.search);
+const cursoId = urlParams.get('curso_id');
+if (!cursoId) window.location.href = '/Cliente/cursos';
 
+let videos = [];
+let progreso = [];
+let cursoCompletado = false;
+let puntuacionSeleccionada = 0;
+
+// Cargar información del curso (título, descripción general)
+async function cargarInfoCurso() {
+    try {
+        const resp = await fetch(`/api.php?action=obtener_curso&curso_id=${cursoId}`, { credentials: 'include' });
+        const data = await resp.json();
+        if (data.success) {
+            const curso = data.curso;
+            const container = document.getElementById('cursoInfoContainer');
+            container.innerHTML = `
+                <div class="curso-info">
+                    <h1>${escapeHtml(curso.nombre)}</h1>
+                    <div class="descripcion">${escapeHtml(curso.descripcion || 'Sin descripción disponible')}</div>
+                </div>
+            `;
+        } else {
+            document.getElementById('cursoInfoContainer').innerHTML = '<div class="curso-info"><h1>Curso no encontrado</h1></div>';
+        }
+    } catch (error) {
+        console.error('Error al cargar info del curso', error);
+    }
+}
+
+// Cargar videos y progreso
 async function cargarDatos(){
-try{
-const respVideos=await fetch(`http://localhost/plataforma/api.php?action=videos_curso&curso_id=${cursoId}`,{credentials:'include'})
-const dataVideos=await respVideos.json()
-if(!dataVideos.success)throw new Error()
-videos=dataVideos.videos
+    try{
+        const respVideos = await fetch(`/api.php?action=videos_curso&curso_id=${cursoId}`, { credentials: 'include' });
+        const dataVideos = await respVideos.json();
+        if(!dataVideos.success) throw new Error();
+        videos = dataVideos.videos;
 
-const respProgreso=await fetch(`http://localhost/plataforma/api.php?action=obtener_progreso&curso_id=${cursoId}`,{credentials:'include'})
-const dataProgreso=await respProgreso.json()
-if(dataProgreso.success)progreso=dataProgreso.progreso
+        const respProgreso = await fetch(`/api.php?action=obtener_progreso&curso_id=${cursoId}`, { credentials: 'include' });
+        const dataProgreso = await respProgreso.json();
+        if(dataProgreso.success) progreso = dataProgreso.progreso;
 
-const total=videos.length
-const vistos=progreso.filter(p=>p.visto===1).length
-cursoCompletado=(total>0&&vistos===total)
-
-if(cursoCompletado){
-document.getElementById('cursoCompletadoMsg').innerText='Curso finalizado'
-}
-
-renderLecciones()
-
-let siguiente=videos.find(v=>{
-let p=progreso.find(x=>x.id===v.id)
-return !p||p.visto===0
-})
-
-if(!siguiente&&videos.length>0)siguiente=videos[videos.length-1]
-if(siguiente)cargarVideo(siguiente.id)
-
-}catch{
-document.getElementById('leccionesLista').innerHTML='Error al cargar'
-}
+        const total = videos.length;
+        const vistos = progreso.filter(p => p.visto === 1).length;
+        cursoCompletado = (total > 0 && vistos === total);
+        if(cursoCompletado){
+            document.getElementById('cursoCompletadoMsg').innerText = '✅ Curso finalizado. ¡Felicidades! Completa la evaluación para obtener tu certificado.';
+        }
+        renderLecciones();
+        // Primer video no visto o el último
+        let siguiente = videos.find(v => {
+            let p = progreso.find(x => x.id === v.id);
+            return !p || p.visto === 0;
+        });
+        if(!siguiente && videos.length > 0) siguiente = videos[videos.length-1];
+        if(siguiente) cargarVideo(siguiente.id);
+    } catch(e){
+        document.getElementById('leccionesLista').innerHTML = 'Error al cargar el curso.';
+        console.error(e);
+    }
 }
 
 function renderLecciones(){
-let html=''
-for(let i=0;i<videos.length;i++){
-const v=videos[i]
-const prog=progreso.find(p=>p.id===v.id)
-const visto=prog&&prog.visto===1
-
-let clase='leccion '
-let estado=''
-
-const anterior=(i===0)||(progreso.find(p=>p.id===videos[i-1]?.id)?.visto===1)
-
-if(visto){clase+='vista';estado='Completado'}
-else if(anterior){clase+='disponible';estado='Disponible'}
-else{clase+='bloqueada';estado='Bloqueado'}
-
-const actual=document.getElementById('videoFrame').src.includes(encodeURIComponent(v.url))
-if(actual)clase+=' actual'
-
-html+=`<div class="${clase}" data-id="${v.id}">
-<span>${v.orden}. ${v.titulo}</span>
-<span>${estado}</span>
-</div>`
-}
-
-document.getElementById('leccionesLista').innerHTML=html
-
-document.querySelectorAll('.leccion.disponible,.leccion.vista').forEach(el=>{
-el.onclick=()=>cargarVideo(parseInt(el.dataset.id))
-})
+    let html = '';
+    for(let i = 0; i < videos.length; i++){
+        const v = videos[i];
+        const prog = progreso.find(p => p.id === v.id);
+        const visto = prog && prog.visto === 1;
+        let clase = 'leccion ';
+        let estadoIcon = '';
+        const anterior = (i === 0) || (progreso.find(p => p.id === videos[i-1]?.id)?.visto === 1);
+        if(visto){
+            clase += 'vista';
+            estadoIcon = '<i class="fas fa-check-circle"></i>';
+        } else if(anterior){
+            clase += 'disponible';
+            estadoIcon = '<i class="fas fa-play-circle"></i>';
+        } else {
+            clase += 'bloqueada';
+            estadoIcon = '<i class="fas fa-lock"></i>';
+        }
+        const actual = document.getElementById('videoFrame').src.includes(encodeURIComponent(v.url));
+        if(actual) clase += ' actual';
+        // Descripción de la lección (si existe)
+        const descripcionLeccion = v.descripcion ? `<div class="leccion-desc">${escapeHtml(v.descripcion)}</div>` : '';
+        html += `
+            <div class="${clase}" data-id="${v.id}">
+                <div class="leccion-titulo">
+                    <span><strong>${v.orden}.</strong> ${escapeHtml(v.titulo)}</span>
+                    <span>${estadoIcon}</span>
+                </div>
+                ${descripcionLeccion}
+            </div>
+        `;
+    }
+    document.getElementById('leccionesLista').innerHTML = html;
+    // Eventos click solo si disponible o vista (para cambiar de video)
+    document.querySelectorAll('.leccion.disponible, .leccion.vista').forEach(el => {
+        el.onclick = () => cargarVideo(parseInt(el.dataset.id));
+    });
 }
 
 async function cargarVideo(id){
-const video=videos.find(v=>v.id===id)
-if(!video)return
-document.getElementById('videoFrame').src=video.url
-
-const prog=progreso.find(p=>p.id===id)
-if(!prog||prog.visto===0)await marcarVisto(id)
-
-renderLecciones()
+    const video = videos.find(v => v.id === id);
+    if(!video) return;
+    document.getElementById('videoFrame').src = video.url;
+    // Marcar como visto automáticamente al cargar (si no estaba visto)
+    const prog = progreso.find(p => p.id === id);
+    if(!prog || prog.visto === 0){
+        await marcarVisto(id);
+    }
+    renderLecciones();
 }
 
 async function marcarVisto(id){
-const resp=await fetch('http://localhost/plataforma/api.php?action=marcar_visto',{
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({video_id:id}),
-credentials:'include'
-})
-const data=await resp.json()
-if(data.success){
-const r=await fetch(`http://localhost/plataforma/api.php?action=obtener_progreso&curso_id=${cursoId}`,{credentials:'include'})
-const d=await r.json()
-if(d.success)progreso=d.progreso
-
-const total=videos.length
-const vistos=progreso.filter(p=>p.visto===1).length
-
-if(total>0&&vistos===total&&!cursoCompletado){
-cursoCompletado=true
-document.getElementById('cursoCompletadoMsg').innerText='Curso finalizado. Completa la evaluación'
-document.getElementById('calificacionModal').style.display='flex'
-}
-}
+    const resp = await fetch('/api.php?action=marcar_visto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ video_id: id }),
+        credentials: 'include'
+    });
+    const data = await resp.json();
+    if(data.success){
+        const r = await fetch(`/api.php?action=obtener_progreso&curso_id=${cursoId}`, { credentials: 'include' });
+        const d = await r.json();
+        if(d.success) progreso = d.progreso;
+        const total = videos.length;
+        const vistos = progreso.filter(p => p.visto === 1).length;
+        if(total > 0 && vistos === total && !cursoCompletado){
+            cursoCompletado = true;
+            document.getElementById('cursoCompletadoMsg').innerHTML = '🎉 ¡Curso completado! Debes calificarlo para obtener tu certificado.';
+            document.getElementById('calificacionModal').style.display = 'flex';
+        }
+    }
 }
 
-document.querySelectorAll('.star').forEach(star=>{
-star.onclick=()=>{
-puntuacionSeleccionada=parseInt(star.dataset.value)
-document.querySelectorAll('.star').forEach((s,i)=>{
-s.classList.toggle('active',i<puntuacionSeleccionada)
-})
+// Estrellas de calificación
+document.querySelectorAll('.star').forEach(star => {
+    star.onclick = () => {
+        puntuacionSeleccionada = parseInt(star.dataset.value);
+        document.querySelectorAll('.star').forEach((s, idx) => {
+            s.classList.toggle('active', idx < puntuacionSeleccionada);
+        });
+    };
+});
+
+document.getElementById('btnEnviarCalificacion').onclick = async () => {
+    const comentario = document.getElementById('comentario').value.trim();
+    if(puntuacionSeleccionada === 0){
+        document.getElementById('modalMsg').innerText = 'Selecciona una calificación (1 a 5 estrellas)';
+        return;
+    }
+    if(!comentario){
+        document.getElementById('modalMsg').innerText = 'El comentario es obligatorio.';
+        return;
+    }
+    const fd = new FormData();
+    fd.append('action', 'calificar_curso');
+    fd.append('curso_id', cursoId);
+    fd.append('puntuacion', puntuacionSeleccionada);
+    fd.append('comentario', comentario);
+    const resp = await fetch('/api.php', { method: 'POST', body: fd, credentials: 'include' });
+    const data = await resp.json();
+    if(data.success){
+        alert('Calificación guardada. ¡Gracias!');
+        document.getElementById('calificacionModal').style.display = 'none';
+        // Aquí podrías generar el certificado (puedes llamar a generar_certificado)
+        const certResp = await fetch(`/api.php?action=generar_certificado&curso_id=${cursoId}`, { credentials: 'include' });
+        const certData = await certResp.json();
+        if(certData.success){
+            // Abrir ventana con certificado
+            const cert = certData.certificado;
+            const win = window.open();
+            win.document.write(`
+                <html><head><title>Certificado</title><style>
+                    body{font-family:'Courier New',monospace;display:flex;justify-content:center;align-items:center;height:100vh;text-align:center;}
+                    .cert{ border:12px solid #4f46e5; padding:40px; width:700px; margin:auto; background:#fff; color:#0f172a; border-radius:20px;}
+                    h1{color:#4f46e5;} .firma{margin-top:30px; border-top:1px solid #ccc; padding-top:15px;}
+                </style></head>
+                <body><div class="cert"><h1>Certificado de Finalización</h1>
+                <p>Otorgado a:</p><h2>${cert.usuario}</h2>
+                <p>Por haber completado el curso:</p><h3>${cert.curso}</h3>
+                <p>Fecha: ${cert.fecha}</p>
+                <p class="firma">Plataforma Educativa<br>${cert.codigo}</p></div></body></html>
+            `);
+            win.document.close();
+            win.print(); // para guardar como PDF
+        } else {
+            alert('No se pudo generar el certificado.');
+        }
+    } else {
+        document.getElementById('modalMsg').innerText = data.message || 'Error al enviar calificación.';
+    }
+};
+
+function escapeHtml(str){
+    if(!str) return '';
+    return str.replace(/[&<>]/g, function(m){
+        if(m === '&') return '&amp;';
+        if(m === '<') return '&lt;';
+        if(m === '>') return '&gt;';
+        return m;
+    });
 }
-})
 
-document.getElementById('btnEnviarCalificacion').onclick=async()=>{
-const comentario=document.getElementById('comentario').value.trim()
-
-if(puntuacionSeleccionada===0){
-document.getElementById('modalMsg').innerText='Selecciona una calificación'
-return
-}
-
-if(!comentario){
-document.getElementById('modalMsg').innerText='Comentario requerido'
-return
-}
-
-const fd=new FormData()
-fd.append('action','calificar_curso')
-fd.append('curso_id',cursoId)
-fd.append('puntuacion',puntuacionSeleccionada)
-fd.append('comentario',comentario)
-
-const resp=await fetch('http://localhost/plataforma/api.php',{method:'POST',body:fd,credentials:'include'})
-const data=await resp.json()
-
-if(data.success){
-document.getElementById('calificacionModal').style.display='none'
-}else{
-document.getElementById('modalMsg').innerText='Error al enviar'
-}
-}
-
-cargarDatos()
+cargarInfoCurso();
+cargarDatos();
 </script>
-
 </body>
 </html>

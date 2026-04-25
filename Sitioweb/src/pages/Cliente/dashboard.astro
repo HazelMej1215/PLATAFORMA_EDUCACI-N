@@ -1,27 +1,18 @@
----
-// src/pages/Cliente/dashboard.astro
----
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel del Cliente | Plataforma Educativa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: #f1f5f9;
             color: #0f172a;
         }
-
-        /* Navbar moderno */
         .navbar {
             background: #0f172a;
             color: #e2e8f0;
@@ -31,9 +22,8 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
-
         .logo h2 {
             font-size: 1.25rem;
             font-weight: 600;
@@ -42,14 +32,12 @@
             -webkit-background-clip: text;
             color: transparent;
         }
-
         .nav-links {
             display: flex;
             gap: 1.5rem;
             align-items: center;
             flex-wrap: wrap;
         }
-
         .nav-links a {
             color: #cbd5e1;
             text-decoration: none;
@@ -57,11 +45,7 @@
             transition: color 0.2s;
             font-size: 0.9rem;
         }
-
-        .nav-links a:hover {
-            color: white;
-        }
-
+        .nav-links a:hover { color: white; }
         .user-info {
             display: flex;
             align-items: center;
@@ -70,227 +54,111 @@
             padding: 0.5rem 1rem;
             border-radius: 2rem;
         }
-
-        .user-info span {
-            font-weight: 500;
-            color: white;
-        }
-
+        .user-info span { font-weight: 500; color: white; }
         .logout-btn {
             background: #dc2626;
             padding: 0.4rem 1rem;
             border-radius: 2rem;
             color: white !important;
         }
-
-        .logout-btn:hover {
-            background: #b91c1c;
-        }
-
-        /* Contenido principal */
+        .logout-btn:hover { background: #b91c1c; }
         .container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1.5rem;
         }
-
         .welcome-card {
             background: linear-gradient(145deg, #4f46e5, #7c3aed);
             border-radius: 2rem;
             padding: 2rem;
             color: white;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
-
-        .welcome-card h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .welcome-card p {
-            opacity: 0.9;
-            font-size: 1rem;
-        }
-
-        /* Tarjetas de cursos */
+        .welcome-card h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .welcome-card p { opacity: 0.9; font-size: 1rem; }
         .section-title {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: #0f172a;
         }
-
-        .courses-grid {
+        .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
         }
-
-        .course-card {
+        .category-card {
             background: white;
             border-radius: 1.5rem;
             overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             border: 1px solid #e2e8f0;
+            text-align: center;
+            padding: 2rem 1.5rem;
         }
-
-        .course-card:hover {
+        .category-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
         }
-
-        .course-image {
-            height: 160px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        .category-icon {
             font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #4f46e5;
         }
-
-        .course-info {
-            padding: 1.5rem;
-        }
-
-        .course-info h3 {
+        .category-card h3 {
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: #0f172a;
         }
-
-        .course-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-        }
-
-        .btn {
-            background: #4f46e5;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.75rem;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: background 0.2s;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background: #4338ca;
-        }
-
-        .progress {
+        .category-card p {
             font-size: 0.85rem;
             color: #475569;
+            margin-bottom: 1rem;
         }
-
-        /* Responsive */
+        .btn-sm {
+            background: #4f46e5;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                text-align: center;
-                padding: 1rem;
-            }
-            .nav-links {
-                justify-content: center;
-            }
-            .container {
-                padding: 0 1rem;
-            }
-            .welcome-card h1 {
-                font-size: 1.4rem;
-            }
+            .navbar { flex-direction: column; text-align: center; padding: 1rem; }
+            .nav-links { justify-content: center; }
+            .container { padding: 0 1rem; }
         }
-
-        @media (max-width: 480px) {
-            .courses-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
+        /* Modo oscuro */
         body.dark-theme {
-    background: #0f172a;
-    color: #e2e8f0;
-}
-body.dark-theme .navbar,
-body.dark-theme .sidebar {
-    background: #020617;
-}
-body.dark-theme .card,
-body.dark-theme .profile-card,
-body.dark-theme .video-card,
-body.dark-theme .lecciones,
-body.dark-theme .modal-box {
-    background: #1e293b;
-    color: #e2e8f0;
-}
-body.dark-theme .course-card {
-    background: #1e293b;
-    border-color: #334155;
-}
-body.dark-theme .welcome-card {
-    background: linear-gradient(145deg, #1e293b, #0f172a);
-}
-body.dark-theme .leccion.disponible {
-    background: #334155;
-    color: #a5b4fc;
-}
-body.dark-theme .leccion.vista {
-    background: #065f46;
-    color: #d1fae5;
-}
-body.dark-theme .leccion.bloqueada {
-    background: #334155;
-    color: #94a3b8;
-}
-body.dark-theme input,
-body.dark-theme textarea,
-body.dark-theme select {
-    background: #0f172a;
-    color: #e2e8f0;
-    border-color: #475569;
-}
-body.dark-theme .btn {
-    background: #4f46e5;
-}
-body.dark-theme .logout-btn {
-    background: #b91c1c;
-}
-body.dark-theme .progress,
-body.dark-theme .estado {
-    color: #94a3b8;
-}
-body.dark-theme .stat {
-    background: #1e293b;
-    border-color: #334155;
-}
-body.dark-theme table th {
-    background: #1e293b;
-}
-body.dark-theme table td {
-    border-bottom-color: #334155;
-}
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        body.dark-theme .navbar { background: #020617; }
+        body.dark-theme .category-card {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        body.dark-theme .category-card p { color: #94a3b8; }
+        body.dark-theme .welcome-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+        }
+        body.dark-theme .logout-btn { background: #b91c1c; }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <div class="logo">
-            <h2>Plataforma Educativa</h2>
-        </div>
+        <div class="logo"><h2>Plataforma Educativa</h2></div>
         <div class="nav-links">
             <a href="/Cliente/dashboard">Inicio</a>
             <a href="/Cliente/perfil">Mi Perfil</a>
             <a href="/Cliente/cursos">Mis Cursos</a>
             <div class="user-info">
                 <span id="nombreUsuario">Cliente</span>
-                <a href="http://localhost/plataforma/api.php?action=logout" class="logout-btn">Cerrar sesión</a>
+                <a href="/api.php?action=logout" class="logout-btn">Cerrar sesión</a>
             </div>
         </div>
     </div>
@@ -298,43 +166,77 @@ body.dark-theme table td {
     <div class="container">
         <div class="welcome-card">
             <h1>Bienvenido, <span id="nombreBienvenida"></span></h1>
-            <p>Continúa aprendiendo desde donde lo dejaste. Aquí tienes tus cursos disponibles.</p>
+            <p>Explora nuestras categorías y encuentra el curso perfecto para ti.</p>
         </div>
 
-        <h2 class="section-title">Cursos disponibles</h2>
-        <div id="cursosDisponibles" class="courses-grid">
-            <!-- Aquí se cargarán los cursos -->
+        <h2 class="section-title">Categorías de aprendizaje</h2>
+        <div class="categories-grid" id="categoriasGrid">
+            <!-- Categorías estáticas -->
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Desarrollo Web</h3>
+                <p>Aprende HTML, CSS, JavaScript, React y más.</p>
+                <a href="/Cliente/cursos" class="btn-sm">Ver cursos</a>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Marketing Digital</h3>
+                <p>SEO, redes sociales, email marketing y analítica.</p>
+                <a href="/Cliente/cursos" class="btn-sm">Ver cursos</a>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-database"></i></div>
+                <h3>Ciencia de Datos</h3>
+                <p>Python, Pandas, visualización y Machine Learning.</p>
+                <a href="/Cliente/cursos" class="btn-sm">Ver cursos</a>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-palette"></i></div>
+                <h3>Diseño UX/UI</h3>
+                <p>Figma, prototipado, investigación de usuarios.</p>
+                <a href="/Cliente/cursos" class="btn-sm">Ver cursos</a>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-robot"></i></div>
+                <h3>Inteligencia Artificial</h3>
+                <p>Redes neuronales, TensorFlow y visión artificial.</p>
+                <a href="/Cliente/cursos" class="btn-sm">Ver cursos</a>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Desarrollo Móvil</h3>
+                <p>Flutter, Kotlin, Swift y desarrollo cross-platform.</p>
+                <a href="/Cliente/cursos" class="btn-sm">Ver cursos</a>
+            </div>
         </div>
     </div>
-<script>
-(function(){
-    const saved = localStorage.getItem('theme');
-    if (saved === 'oscuro') document.body.classList.add('dark-theme');
-    else if (saved === 'claro') document.body.classList.add('light-theme');
-    else {
-        fetch('http://localhost/plataforma/api.php?action=obtener_tema', { credentials: 'include' })
-            .then(r => r.json())
-            .then(data => {
-                const theme = data.theme || 'claro';
-                document.body.classList.add(theme === 'oscuro' ? 'dark-theme' : 'light-theme');
-                localStorage.setItem('theme', theme);
-            })
-            .catch(() => document.body.classList.add('light-theme'));
-    }
-})();
-</script>
+
     <script>
+        // Tema oscuro/claro
+        (function(){
+            const saved = localStorage.getItem('theme');
+            if (saved === 'oscuro') document.body.classList.add('dark-theme');
+            else if (saved === 'claro') document.body.classList.remove('dark-theme');
+            else {
+                fetch('/api.php?action=obtener_tema', { credentials: 'include' })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.theme === 'oscuro') document.body.classList.add('dark-theme');
+                        localStorage.setItem('theme', data.theme || 'claro');
+                    })
+                    .catch(() => {});
+            }
+        })();
+
+        // Verificar sesión y mostrar nombre
         async function verificarAcceso() {
             try {
-                const resp = await fetch('http://localhost/plataforma/api.php?action=verificar_sesion', {
-                    credentials: 'include'
-                });
+                const resp = await fetch('/api.php?action=verificar_sesion', { credentials: 'include' });
                 const data = await resp.json();
                 if (!data.logged || data.rol !== 'cliente') {
                     window.location.href = '/';
                     return;
                 }
-                // Mostrar nombre del usuario
                 const nombreSpan = document.getElementById('nombreUsuario');
                 const nombreBienvenida = document.getElementById('nombreBienvenida');
                 if (nombreSpan && data.nombre) {
@@ -342,63 +244,10 @@ body.dark-theme table td {
                     nombreBienvenida.textContent = data.nombre;
                 }
             } catch (error) {
-                console.error('Error al verificar sesión:', error);
                 window.location.href = '/';
             }
         }
-
-        async function cargarCursos() {
-            try {
-                const resp = await fetch('http://localhost/plataforma/api.php?action=listar_cursos_cliente', {
-                    credentials: 'include'
-                });
-                const data = await resp.json();
-                const contenedor = document.getElementById('cursosDisponibles');
-                if (!data.success) {
-                    contenedor.innerHTML = '<p>No se pudieron cargar los cursos. Intenta más tarde.</p>';
-                    return;
-                }
-                if (data.cursos.length === 0) {
-                    contenedor.innerHTML = '<p>No hay cursos disponibles en este momento.</p>';
-                    return;
-                }
-                let html = '';
-                for (const curso of data.cursos) {
-                    // Icono o imagen según el curso (puede ser aleatorio o fijo)
-                    const iconos = ['📘', '📊', '💻', '🎨', '📈', '🤖'];
-                    const icono = iconos[curso.id % iconos.length];
-                    html += `
-                        <div class="course-card">
-                            <div class="course-image">${icono}</div>
-                            <div class="course-info">
-                                <h3>${escapeHtml(curso.nombre)}</h3>
-                                <div class="course-meta">
-                                    <a href="/Cliente/ver-curso?curso_id=${curso.id}" class="btn">Acceder al curso</a>
-                                    <span class="progress">Ver progreso</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-                contenedor.innerHTML = html;
-            } catch (error) {
-                console.error('Error al cargar cursos:', error);
-                document.getElementById('cursosDisponibles').innerHTML = '<p>Error de conexión con el servidor.</p>';
-            }
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
         verificarAcceso();
-        cargarCursos();
     </script>
 </body>
 </html>

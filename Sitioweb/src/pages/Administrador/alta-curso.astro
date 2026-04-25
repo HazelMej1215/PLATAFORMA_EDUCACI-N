@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alta de Curso</title>
+    <title>Alta de Curso | Administrador</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: #f1f5f9;
         }
         .sidebar {
@@ -23,12 +19,7 @@
             padding: 1.5rem;
             overflow-y: auto;
         }
-        .sidebar h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            color: white;
-        }
+        .sidebar h2 { font-size: 1.25rem; margin-bottom: 2rem; }
         .sidebar a {
             display: block;
             color: #cbd5e1;
@@ -37,58 +28,37 @@
             border-radius: 0.75rem;
             text-decoration: none;
         }
-        .sidebar a:hover {
-            background: #1e293b;
-            color: white;
-        }
-        .main {
-            margin-left: 280px;
-            padding: 2rem;
-        }
+        .sidebar a:hover { background: #1e293b; color: white; }
+        .main { margin-left: 280px; padding: 2rem; }
         .card {
             background: white;
             border-radius: 1.5rem;
             padding: 2rem;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
-        h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 1.5rem;
-        }
-        input, select {
+        h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .sub { color: #64748b; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
+        input, select, textarea {
             width: 100%;
-            padding: 0.85rem 1rem;
-            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
             border: 1px solid #e2e8f0;
             border-radius: 1rem;
             font-size: 0.95rem;
             background: #f8fafc;
         }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-            background: white;
-        }
+        textarea { min-height: 80px; resize: vertical; }
         .video-item {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            align-items: center;
-        }
-        .video-item input {
-            flex: 1;
-            margin-bottom: 0;
-        }
-        .add-video {
-            background: #10b981;
-            margin-top: 0.5rem;
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
             margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
         }
+        .add-video { background: #10b981; margin: 0.5rem 0 1rem; }
         button {
             width: 100%;
             padding: 0.85rem;
@@ -99,32 +69,19 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
         }
-        button:hover {
-            background: #4338ca;
+        button:hover { opacity: 0.9; }
+        .add-video:hover { background: #059669; }
+        .image-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            margin-top: 0.5rem;
+            border-radius: 0.5rem;
         }
-        .add-video:hover {
-            background: #059669;
-        }
-        .msg {
-            margin-top: 1rem;
-            padding: 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.85rem;
-            text-align: center;
-            display: none;
-        }
-        .success {
-            background: #d1fae5;
-            color: #065f46;
-            display: block;
-        }
-        .error {
-            background: #fee2e2;
-            color: #b91c1c;
-            display: block;
-        }
+        .msg { margin-top: 1rem; padding: 0.75rem; border-radius: 1rem; text-align: center; display: none; }
+        .success { background: #d1fae5; color: #065f46; display: block; }
+        .error { background: #fee2e2; color: #b91c1c; display: block; }
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -132,32 +89,11 @@
                 position: relative;
                 display: flex;
                 flex-wrap: wrap;
-                gap: 0.5rem;
-                padding: 1rem;
                 justify-content: center;
-            }
-            .sidebar h2 {
-                width: 100%;
-                text-align: center;
-                margin-bottom: 0.75rem;
-            }
-            .sidebar a {
-                display: inline-block;
-                margin: 0 0.25rem;
-                font-size: 0.85rem;
-                padding: 0.5rem 0.75rem;
-            }
-            .main {
-                margin-left: 0;
                 padding: 1rem;
             }
-            .card {
-                margin: 0;
-                padding: 1.5rem;
-            }
-            .video-item {
-                flex-direction: column;
-            }
+            .sidebar a { display: inline-block; margin: 0 0.25rem; }
+            .main { margin-left: 0; padding: 1rem; }
         }
     </style>
 </head>
@@ -170,41 +106,66 @@
         <a href="/Administrador/visualizaciones">Visualizaciones</a>
         <a href="/Administrador/calificaciones">Calificaciones</a>
         <a href="/Administrador/reportes">Reportes</a>
-        <a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+        <a href="/api.php?action=logout">Cerrar sesión</a>
     </div>
     <div class="main">
         <div class="card">
             <h2>Crear nuevo curso</h2>
+            <p class="sub">Completa la información del curso y sus lecciones</p>
             <form id="formCurso">
-                <input type="text" name="nombre_curso" placeholder="Nombre del curso" required>
-                <select name="profesor_id" id="profesorSelect" required>
-                    <option value="">Seleccione profesor</option>
-                </select>
+                <div class="form-group">
+                    <label>Nombre del curso *</label>
+                    <input type="text" name="nombre_curso" required>
+                </div>
+                <div class="form-group">
+                    <label>Descripción del curso</label>
+                    <textarea name="descripcion_curso"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Imagen del curso (opcional)</label>
+                    <input type="file" id="imagenCurso" accept="image/jpeg,image/png,image/jpg">
+                    <div id="previewContainer" style="display:none;">
+                        <img id="imgPreview" class="image-preview">
+                        <button type="button" id="clearImagen" style="margin-top:0.5rem; background:#ef4444;">Eliminar imagen</button>
+                    </div>
+                    <small>Formato JPG/PNG, máx 2MB. Si no se sube, se usará un icono por defecto.</small>
+                </div>
+                <div class="form-group">
+                    <label>Profesor *</label>
+                    <select name="profesor_id" id="profesorSelect" required>
+                        <option value="">Seleccione profesor</option>
+                    </select>
+                </div>
+                <label>Lecciones del curso</label>
                 <div id="videosContainer">
                     <div class="video-item">
-                        <input type="text" name="videos[]" placeholder="URL o título del video 1" required>
+                        <input type="text" name="video_titulo[]" placeholder="Título del video 1" required>
+                        <textarea name="video_descripcion[]" placeholder="Breve descripción"></textarea>
+                        <input type="text" name="video_url[]" placeholder="URL del video (YouTube, Vimeo)" required>
                     </div>
                 </div>
-                <button type="button" class="add-video" id="agregarVideo">Agregar otro video</button>
+                <button type="button" class="add-video" id="agregarVideo">+ Agregar otra lección</button>
                 <button type="submit">Guardar curso</button>
                 <div id="mensaje" class="msg"></div>
             </form>
         </div>
     </div>
-    <script>
-        async function verificarSesionAdmin() {
-    const resp = await fetch('http://localhost/plataforma/api.php?action=verificar_sesion', { credentials: 'include' });
-    const data = await resp.json();
-    if (!data.logged || data.rol !== 'admin') {
-        window.location.href = '/';
-        return false;
-    }
-    return true;
-}
 
+    <script>
+        let imagenBase64 = null;
+
+        async function verificarSesionAdmin() {
+            const resp = await fetch('/api.php?action=verificar_sesion', { credentials: 'include' });
+            const data = await resp.json();
+            if (!data.logged || data.rol !== 'admin') {
+                window.location.href = '/';
+                return false;
+            }
+            return true;
+        }
 
         async function cargarProfesores() {
-const resp = await fetch('http://localhost/plataforma/api.php?action=listar_profesores', { credentials: 'include' });
+            const resp = await fetch('/api.php?action=listar_profesores', { credentials: 'include' });
             const data = await resp.json();
             const select = document.getElementById('profesorSelect');
             if (data.success) {
@@ -216,40 +177,117 @@ const resp = await fetch('http://localhost/plataforma/api.php?action=listar_prof
                 });
             }
         }
+
+        // Previsualizar imagen
+        document.getElementById('imagenCurso').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                mostrarMensaje('Solo se permiten imágenes', 'error');
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                mostrarMensaje('La imagen no debe superar los 2MB', 'error');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                imagenBase64 = reader.result;
+                document.getElementById('imgPreview').src = imagenBase64;
+                document.getElementById('previewContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('clearImagen').addEventListener('click', () => {
+            imagenBase64 = null;
+            document.getElementById('imagenCurso').value = '';
+            document.getElementById('previewContainer').style.display = 'none';
+        });
+
+        // Agregar video
         document.getElementById('agregarVideo').addEventListener('click', () => {
             const container = document.getElementById('videosContainer');
+            const index = container.children.length;
             const div = document.createElement('div');
             div.className = 'video-item';
-            div.innerHTML = `<input type="text" name="videos[]" placeholder="URL o título del video" required>`;
+            div.innerHTML = `
+                <input type="text" name="video_titulo[]" placeholder="Título del video ${index+1}" required>
+                <textarea name="video_descripcion[]" placeholder="Breve descripción"></textarea>
+                <input type="text" name="video_url[]" placeholder="URL del video (YouTube, Vimeo)" required>
+            `;
             container.appendChild(div);
         });
+
+        // Enviar formulario
         const form = document.getElementById('formCurso');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(form);
-            const resp = await fetch('http://localhost/plataforma/api.php?action=alta_curso', {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
-            const data = await resp.json();
-            const msgDiv = document.getElementById('mensaje');
-            msgDiv.className = 'msg';
-            if (data.success) {
-                msgDiv.classList.add('success');
-                msgDiv.innerText = 'Curso creado con éxito';
-                form.reset();
-                document.getElementById('videosContainer').innerHTML = `<div class="video-item"><input type="text" name="videos[]" placeholder="URL o título del video 1" required></div>`;
-            } else {
-                msgDiv.classList.add('error');
-                msgDiv.innerText = data.message || 'Error al crear curso';
+            const titulos = formData.getAll('video_titulo[]');
+            const descripciones = formData.getAll('video_descripcion[]');
+            const urls = formData.getAll('video_url[]');
+            if (titulos.length === 0) {
+                mostrarMensaje('Debe agregar al menos una lección', 'error');
+                return;
             }
-            msgDiv.style.display = 'block';
+            for (let i = 0; i < titulos.length; i++) {
+                if (!titulos[i].trim() || !urls[i].trim()) {
+                    mostrarMensaje(`Complete título y URL del video ${i+1}`, 'error');
+                    return;
+                }
+            }
+            const videos = titulos.map((tit, idx) => ({
+                titulo: tit,
+                descripcion: descripciones[idx] || '',
+                url: urls[idx]
+            }));
+            const payload = {
+                nombre_curso: formData.get('nombre_curso'),
+                descripcion_curso: formData.get('descripcion_curso') || '',
+                profesor_id: formData.get('profesor_id'),
+                videos: videos,
+                imagen: imagenBase64 || null
+            };
+            try {
+                const resp = await fetch('/api.php?action=alta_curso', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    credentials: 'include'
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    mostrarMensaje('Curso creado con éxito', 'success');
+                    form.reset();
+                    imagenBase64 = null;
+                    document.getElementById('previewContainer').style.display = 'none';
+                    document.getElementById('videosContainer').innerHTML = `
+                        <div class="video-item">
+                            <input type="text" name="video_titulo[]" placeholder="Título del video 1" required>
+                            <textarea name="video_descripcion[]" placeholder="Breve descripción"></textarea>
+                            <input type="text" name="video_url[]" placeholder="URL del video (YouTube, Vimeo)" required>
+                        </div>
+                    `;
+                } else {
+                    mostrarMensaje(data.message || 'Error al crear curso', 'error');
+                }
+            } catch (error) {
+                mostrarMensaje('Error de conexión', 'error');
+            }
+        });
+
+        function mostrarMensaje(texto, tipo) {
+            const msgDiv = document.getElementById('mensaje');
+            msgDiv.textContent = texto;
+            msgDiv.className = `msg ${tipo}`;
             setTimeout(() => {
                 msgDiv.className = 'msg';
                 msgDiv.style.display = 'none';
-            }, 3000);
-        });
+            }, 4000);
+        }
+
+        verificarSesionAdmin();
         cargarProfesores();
     </script>
 </body>

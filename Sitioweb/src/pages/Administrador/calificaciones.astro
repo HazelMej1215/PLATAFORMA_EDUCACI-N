@@ -1,6 +1,3 @@
----
-// src/pages/Administrador/calificaciones.astro
----
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -32,7 +29,7 @@
         <a href="/Administrador/visualizaciones">Visualizaciones</a>
         <a href="/Administrador/calificaciones">Calificaciones</a>
         <a href="/Administrador/reportes">Reportes</a>
-        <a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+        <a href="/api.php?action=logout">Cerrar sesión</a>
     </div>
     <div class="main">
         <div class="card">
@@ -42,7 +39,7 @@
     </div>
     <script>
         async function cargar() {
-            const resp = await fetch('http://localhost/plataforma/api.php?action=calificaciones_listado', { credentials: 'include' });
+            const resp = await fetch('/api.php?action=calificaciones_listado', { credentials: 'include' });
             const data = await resp.json();
             if (!data.success) {
                 document.getElementById('contenido').innerHTML = '<p>Error al cargar</p>';

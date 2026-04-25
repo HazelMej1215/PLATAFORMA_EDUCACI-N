@@ -1,12 +1,11 @@
----
----
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mis Cursos</title>
+<title>Mis Cursos | Plataforma Educativa</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:#f8fafc;color:#0f172a}
@@ -22,22 +21,9 @@ flex-wrap:wrap;
 gap:10px
 }
 
-.navbar h2{
-font-size:18px;
-font-weight:600
-}
-
-.navbar a{
-color:#94a3b8;
-text-decoration:none;
-margin-left:16px;
-font-size:14px;
-transition:.2s
-}
-
-.navbar a:hover{
-color:#fff
-}
+.navbar h2{font-size:18px;font-weight:600}
+.navbar a{color:#94a3b8;text-decoration:none;margin-left:16px;font-size:14px;transition:.2s}
+.navbar a:hover{color:#fff}
 
 .wrapper{
 max-width:1200px;
@@ -62,181 +48,104 @@ color:#64748b
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-gap:20px
+grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+gap:24px
 }
 
-.card{
+.course-card{
 background:#fff;
-border-radius:14px;
-padding:20px;
-box-shadow:0 10px 25px rgba(0,0,0,.05);
+border-radius:20px;
+overflow:hidden;
+transition:transform 0.2s, box-shadow 0.2s;
+box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);
+border:1px solid #e2e8f0;
+}
+.course-card:hover{
+transform:translateY(-5px);
+box-shadow:0 20px 25px -5px rgba(0,0,0,0.1);
+}
+.course-image{
+height:180px;
+background:linear-gradient(135deg, #667eea, #764ba2);
 display:flex;
-flex-direction:column;
-justify-content:space-between;
-transition:.25s;
-position:relative;
-overflow:hidden
+align-items:center;
+justify-content:center;
+color:white;
+font-size:3rem;
+overflow:hidden;
 }
-
-.card:hover{
-transform:translateY(-4px);
-box-shadow:0 15px 35px rgba(0,0,0,.08)
+.course-image img{
+width:100%;
+height:100%;
+object-fit:cover;
 }
-
-.badge{
-position:absolute;
-top:12px;
-right:12px;
-background:#6366f1;
-color:#fff;
-font-size:11px;
-padding:4px 8px;
-border-radius:6px
+.course-info{
+padding:1.5rem;
 }
-
-.card h3{
-font-size:16px;
+.course-info h3{
+font-size:1.2rem;
 font-weight:600;
-margin-bottom:8px
+margin-bottom:0.5rem;
 }
-
-.card p{
-font-size:13px;
-color:#64748b;
-margin-bottom:16px;
-line-height:1.4
+.course-meta{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:1rem;
 }
-
 .btn{
-display:inline-block;
-text-align:center;
-padding:10px;
-border-radius:8px;
-background:#6366f1;
-color:#fff;
+background:#4f46e5;
+color:white;
+padding:0.5rem 1rem;
+border-radius:0.75rem;
 text-decoration:none;
-font-size:14px;
+font-size:0.85rem;
 font-weight:500;
-transition:.2s
+transition:.2s;
 }
-
 .btn:hover{
-background:#4f46e5
+background:#4338ca;
 }
-
 .empty{
 text-align:center;
 color:#64748b;
 padding:40px;
-font-size:14px
+font-size:14px;
 }
-
-@media(max-width:768px){
-.navbar{
-flex-direction:column;
-align-items:flex-start
+@media (max-width:768px){
+.navbar{flex-direction:column;align-items:flex-start}
+.grid{grid-template-columns:1fr}
 }
-.navbar div{
-display:flex;
-flex-wrap:wrap;
-gap:10px
-}
-.wrapper{
-margin:20px auto
-}
-}
-
-body.dark-theme {
-    background: #0f172a;
-    color: #e2e8f0;
-}
-body.dark-theme .navbar,
-body.dark-theme .sidebar {
-    background: #020617;
-}
-body.dark-theme .card,
-body.dark-theme .profile-card,
-body.dark-theme .video-card,
-body.dark-theme .lecciones,
-body.dark-theme .modal-box {
-    background: #1e293b;
-    color: #e2e8f0;
-}
-body.dark-theme .course-card {
-    background: #1e293b;
-    border-color: #334155;
-}
-body.dark-theme .welcome-card {
-    background: linear-gradient(145deg, #1e293b, #0f172a);
-}
-body.dark-theme .leccion.disponible {
-    background: #334155;
-    color: #a5b4fc;
-}
-body.dark-theme .leccion.vista {
-    background: #065f46;
-    color: #d1fae5;
-}
-body.dark-theme .leccion.bloqueada {
-    background: #334155;
-    color: #94a3b8;
-}
-body.dark-theme input,
-body.dark-theme textarea,
-body.dark-theme select {
-    background: #0f172a;
-    color: #e2e8f0;
-    border-color: #475569;
-}
-body.dark-theme .btn {
-    background: #4f46e5;
-}
-body.dark-theme .logout-btn {
-    background: #b91c1c;
-}
-body.dark-theme .progress,
-body.dark-theme .estado {
-    color: #94a3b8;
-}
-body.dark-theme .stat {
-    background: #1e293b;
-    border-color: #334155;
-}
-body.dark-theme table th {
-    background: #1e293b;
-}
-body.dark-theme table td {
-    border-bottom-color: #334155;
-}
+/* Modo oscuro */
+body.dark-theme{background:#0f172a;color:#e2e8f0}
+body.dark-theme .navbar{background:#020617}
+body.dark-theme .course-card{background:#1e293b;border-color:#334155}
+body.dark-theme .course-info h3{color:#f1f5f9}
+body.dark-theme .btn{background:#4f46e5}
 </style>
 </head>
 <body>
-
 <div class="navbar">
 <h2>Plataforma Educativa</h2>
 <div>
 <a href="/Cliente/dashboard">Inicio</a>
 <a href="/Cliente/perfil">Perfil</a>
 <a href="/Cliente/cursos">Cursos</a>
-<a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+<a href="/api.php?action=logout">Cerrar sesión</a>
 </div>
 </div>
 
 <div class="wrapper">
-
 <div class="header">
 <h1>Mis cursos</h1>
 <p>Accede a tus cursos disponibles y continúa tu aprendizaje</p>
 </div>
-
 <div id="listaCursos" class="grid"></div>
-
 </div>
 
 <script>
+// Tema oscuro/claro
 (function(){
-    // Aplicar tema guardado en localStorage o cargar desde servidor
     const applyTheme = (theme) => {
         if (theme === 'oscuro') {
             document.body.classList.add('dark-theme');
@@ -247,56 +156,56 @@ body.dark-theme table td {
         }
         localStorage.setItem('theme', theme);
     };
-
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        applyTheme(savedTheme);
-    } else {
-        fetch('http://localhost/plataforma/api.php?action=obtener_tema', { credentials: 'include' })
+    const saved = localStorage.getItem('theme');
+    if (saved) applyTheme(saved);
+    else {
+        fetch('/api.php?action=obtener_tema', { credentials: 'include' })
             .then(r => r.json())
             .then(data => applyTheme(data.theme || 'claro'))
             .catch(() => applyTheme('claro'));
     }
-
-    // Escuchar cambios de tema en otras pestañas
-    window.addEventListener('storage', (e) => {
-        if (e.key === 'theme') {
-            applyTheme(e.newValue);
-        }
-    });
 })();
 
 async function cargarCursos(){
-const resp=await fetch('http://localhost/plataforma/api.php?action=listar_cursos_cliente',{credentials:'include'})
-const data=await resp.json()
-
-const cont=document.getElementById('listaCursos')
-
-if(!data.success||data.cursos.length===0){
-cont.innerHTML='<div class="empty">No hay cursos disponibles</div>'
-return
+    const resp = await fetch('/api.php?action=listar_cursos_cliente', { credentials: 'include' });
+    const data = await resp.json();
+    const cont = document.getElementById('listaCursos');
+    if(!data.success || data.cursos.length===0){
+        cont.innerHTML='<div class="empty">No hay cursos disponibles</div>';
+        return;
+    }
+    let html = '';
+    for(const curso of data.cursos){
+        let imagenHtml = '';
+        if(curso.imagen && curso.imagen.trim() !== ''){
+            imagenHtml = `<img src="/uploads/cursos/${curso.imagen}" alt="${escapeHtml(curso.nombre)}">`;
+        } else {
+            imagenHtml = '<i class="fas fa-graduation-cap"></i>';
+        }
+        html += `
+            <div class="course-card">
+                <div class="course-image">${imagenHtml}</div>
+                <div class="course-info">
+                    <h3>${escapeHtml(curso.nombre)}</h3>
+                    <div class="course-meta">
+                        <a href="/Cliente/ver-curso?curso_id=${curso.id}" class="btn">Acceder al curso</a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    cont.innerHTML = html;
 }
-
-let html=''
-
-data.cursos.forEach(curso=>{
-html+=`
-<div class="card">
-<div class="badge">Curso</div>
-<div>
-<h3>${curso.nombre}</h3>
-<p>Accede al contenido del curso y continúa tu progreso.</p>
-</div>
-<a href="/Cliente/ver-curso?curso_id=${curso.id}" class="btn">Entrar</a>
-</div>
-`
-})
-
-cont.innerHTML=html
+function escapeHtml(str){
+    if(!str) return '';
+    return str.replace(/[&<>]/g, function(m){
+        if(m === '&') return '&amp;';
+        if(m === '<') return '&lt;';
+        if(m === '>') return '&gt;';
+        return m;
+    });
 }
-
-cargarCursos()
+cargarCursos();
 </script>
-
 </body>
 </html>

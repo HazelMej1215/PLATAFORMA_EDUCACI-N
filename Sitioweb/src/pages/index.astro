@@ -1,261 +1,194 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión | Plataforma Educativa</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciar sesión</title>
 
-        body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-        .login-wrapper {
-            max-width: 1000px;
-            width: 100%;
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-            display: flex;
-            flex-wrap: wrap;
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
 
-        .info-panel {
-            flex: 1;
-            background: linear-gradient(145deg, #4f46e5, #7c3aed);
-            padding: 2.5rem;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+body{
+font-family:'Inter',sans-serif;
+background:#f3f4f6;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#111827
+}
 
-        .info-panel h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            letter-spacing: -0.01em;
-        }
+.container{
+width:100%;
+max-width:420px;
+background:#ffffff;
+padding:36px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,.08)
+}
 
-        .info-panel p {
-            font-size: 1rem;
-            line-height: 1.5;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-        }
+.logo{
+font-size:18px;
+font-weight:600;
+text-align:center;
+margin-bottom:6px
+}
 
-        .features {
-            list-style: none;
-        }
+.subtitle{
+font-size:13px;
+text-align:center;
+color:#6b7280;
+margin-bottom:28px
+}
 
-        .features li {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
+.field{
+margin-bottom:16px
+}
 
-        .features li::before {
-            content: "✓";
-            background: rgba(255, 255, 255, 0.2);
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
+.field label{
+font-size:12px;
+color:#374151;
+display:block;
+margin-bottom:6px
+}
 
-        .form-panel {
-            flex: 1;
-            padding: 2.5rem;
-            background: white;
-        }
+.field input{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #e5e7eb;
+background:#f9fafb;
+font-size:14px;
+transition:.2s
+}
 
-        .form-panel h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
-        }
+.field input:focus{
+outline:none;
+border-color:#6366f1;
+background:#fff
+}
 
-        .form-panel .subtitle {
-            color: #6b7280;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-        }
+.actions{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+font-size:12px
+}
 
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
+.actions a{
+color:#6366f1;
+text-decoration:none
+}
 
-        .input-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #374151;
-            margin-bottom: 0.5rem;
-        }
+.actions a:hover{
+text-decoration:underline
+}
 
-        .input-group input {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 1rem;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-            background: #f9fafb;
-            font-family: inherit;
-        }
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#111827;
+color:#fff;
+font-size:14px;
+font-weight:500;
+cursor:pointer;
+transition:.2s
+}
 
-        .input-group input:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-            background: white;
-        }
+button:hover{
+background:#000
+}
 
-        button {
-            width: 100%;
-            padding: 0.85rem;
-            background: #4f46e5;
-            color: white;
-            border: none;
-            border-radius: 1rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.05s;
-            font-family: inherit;
-        }
+.error{
+margin-top:12px;
+font-size:13px;
+color:#dc2626;
+text-align:center;
+display:none
+}
 
-        button:hover {
-            background: #4338ca;
-        }
+.footer{
+margin-top:20px;
+font-size:13px;
+text-align:center;
+color:#6b7280
+}
 
-        button:active {
-            transform: scale(0.98);
-        }
+.footer a{
+color:#111827;
+text-decoration:none;
+font-weight:500
+}
 
-        .error-message {
-            background: #fee2e2;
-            color: #b91c1c;
-            padding: 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.85rem;
-            margin-top: 1rem;
-            text-align: center;
-            border-left: 4px solid #ef4444;
-        }
+.footer a:hover{
+text-decoration:underline
+}
 
-        .register-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.85rem;
-            color: #6b7280;
-        }
-
-        .register-link a {
-            color: #4f46e5;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 720px) {
-            .login-wrapper {
-                flex-direction: column;
-                border-radius: 1.5rem;
-            }
-            .info-panel {
-                text-align: center;
-                align-items: center;
-            }
-            .features li {
-                justify-content: center;
-            }
-            .form-panel, .info-panel {
-                padding: 1.8rem;
-            }
-        }
-    </style>
+</style>
 </head>
-<body>
-    <div class="login-wrapper">
-        <div class="info-panel">
-            <h1>Aprende sin límites</h1>
-            <p>Accede a cursos de alta calidad, certificados y una comunidad que impulsa tu carrera.</p>
-            <ul class="features">
-                <li>Más de 200 cursos</li>
-                <li>Certificados digitales</li>
-                <li>Modo oscuro y claro</li>
-                <li>Progreso sincronizado</li>
-            </ul>
-        </div>
-        <div class="form-panel">
-            <h2>Bienvenido</h2>
-            <div class="subtitle">Inicia sesión para continuar</div>
-                <form id="loginForm" method="POST" action="http://localhost/plataforma/api.php?action=login">
-            <div class="input-group">
-                    <label for="email">Correo electrónico</label>
-                    <input type="email" id="email" name="correo" placeholder="tú@ejemplo.com" required autocomplete="email">
-                </div>
-                <div class="input-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="contraseña" placeholder="••••••••" required autocomplete="current-password">
-                </div>
-                <button type="submit">Ingresar</button>
-                <div id="errorMsg" class="error-message" style="display: none;"></div>
-            </form>
-            <div class="register-link">
-                ¿No tienes cuenta? <a href="/registro">Regístrate gratis</a>
-            </div>
-        </div>
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('loginForm');
-            const errorDiv = document.getElementById('errorMsg');
-            if (form) {
-                form.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    errorDiv.style.display = 'none';
-                    const formData = new FormData(form);
-                    try {
-                        const response = await fetch(form.action, { method: 'POST', body: formData,     credentials: 'include'   // ← Agregar esta línea
-});
-                        const result = await response.json();
-                        if (result.success) {
-                            window.location.href = result.redirect;
-                        } else {
-                            errorDiv.textContent = result.message || 'Credenciales incorrectas';
-                            errorDiv.style.display = 'block';
-                        }
-                    } catch (error) {
-                        errorDiv.textContent = 'Error de conexión con el servidor. Asegúrate de que XAMPP esté corriendo.';
-                        errorDiv.style.display = 'block';
-                    }
-                });
-            }
-        });
-    </script>
+<body>
+
+<div class="container">
+
+<div class="logo">Plataforma Educativa</div>
+<div class="subtitle">Accede a tu cuenta</div>
+
+<form id="loginForm" method="POST" action="/api.php?action=login">
+
+<div class="field">
+<label>Correo electrónico</label>
+<input type="email" name="correo" required>
+</div>
+
+<div class="field">
+<label>Contraseña</label>
+<input type="password" name="contraseña" required>
+</div>
+
+<button type="submit">Ingresar</button>
+
+<div id="errorMsg" class="error"></div>
+
+</form>
+
+<div class="footer">
+¿No tienes cuenta? <a href="/registro">Crear cuenta</a>
+</div>
+
+</div>
+
+<script>
+const form=document.getElementById('loginForm')
+const error=document.getElementById('errorMsg')
+
+form.addEventListener('submit',async e=>{
+e.preventDefault()
+error.style.display='none'
+
+const data=new FormData(form)
+
+try{
+const res=await fetch(form.action,{method:'POST',body:data,credentials:'include'})
+const json=await res.json()
+
+if(json.success){
+window.location.href=json.redirect
+}else{
+error.textContent=json.message||'Credenciales incorrectas'
+error.style.display='block'
+}
+}catch{
+error.textContent='Error de conexión'
+error.style.display='block'
+}
+})
+</script>
+
 </body>
 </html>

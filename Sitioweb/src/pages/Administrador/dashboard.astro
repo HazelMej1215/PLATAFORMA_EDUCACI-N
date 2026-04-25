@@ -1,6 +1,4 @@
----
-// src/pages/Administrador/dashboard.astro
----
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -130,7 +128,7 @@
         <a href="/Administrador/visualizaciones">Visualizaciones</a>
         <a href="/Administrador/calificaciones">Calificaciones</a>
         <a href="/Administrador/reportes">Reportes</a>
-        <a href="http://localhost/plataforma/api.php?action=logout">Cerrar sesión</a>
+        <a href="/api.php?action=logout">Cerrar sesión</a>
     </div>
     <div class="main">
         <div class="card">
@@ -153,7 +151,7 @@
     </div>
     <script>
         async function verificarSesion() {
-            const resp = await fetch('http://localhost/plataforma/api.php?action=verificar_sesion', {
+            const resp = await fetch('/api.php?action=verificar_sesion', {
                 credentials: 'include'
             });
             const data = await resp.json();
@@ -165,7 +163,7 @@
         }
 
         async function cargarEstadisticas() {
-            const resp = await fetch('http://localhost/plataforma/api.php?action=estadisticas_admin', {
+            const resp = await fetch('/api.php?action=estadisticas_admin', {
                 credentials: 'include'
             });
             const data = await resp.json();
